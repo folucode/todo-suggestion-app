@@ -1,57 +1,30 @@
-.main {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6rem;
-  min-height: 100vh;
-}
-
-.description {
-  display: inherit;
-  justify-content: inherit;
-  align-items: inherit;
-  font-size: 0.85rem;
-  max-width: var(--max-width);
-  width: 100%;
-  z-index: 2;
-  font-family: var(--font-mono);
-}
-
-.description a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.description p {
-  position: relative;
-  margin: 0;
-  padding: 1rem;
-  background-color: rgba(var(--callout-rgb), 0.5);
-  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
-  border-radius: var(--border-radius);
-}
-
-.code {
-  font-weight: 700;
-  font-family: var(--font-mono);
-}
-
-.grid {
+.pending-tasks {
   display: grid;
-  grid-template-columns: repeat(4, minmax(25%, auto));
-  width: var(--max-width);
-  max-width: 100%;
+  width: 33%;
+  align-self: self-start;
+  padding: 5px;
+  align-items: center;
+  grid-gap: 5px;
+  border: solid 2px rgb(153, 146, 160);
+}
+
+.items {
+  display: grid;
+  width: 100%;
+}
+
+.header {
+  font-weight: 800;
+  margin: 1rem 0;
+  text-align: center;
 }
 
 .card {
   padding: 1rem 1.2rem;
-  border-radius: var(--border-radius);
-  background: rgba(var(--card-rgb), 0);
-  border: 1px solid rgba(var(--card-border-rgb), 0);
+  /* background: rgba(var(--card-rgb), 0); */
+  border: solid 3px rgb(255, 0, 0);
   transition: background 200ms, border 200ms;
+  margin: 3px 0;
 }
 
 .card span {
@@ -71,6 +44,126 @@
   line-height: 1.5;
   max-width: 30ch;
 }
+
+.suggested-task {
+  display: grid;
+  width: 33%;
+  align-self: flex-start;
+  padding: 5px;
+  align-items: center;
+  margin: 0 50px;
+  border: solid 2px rgb(153, 146, 160);
+}
+
+.suggested-task .card {
+  border: solid 2px rgb(255, 255, 255);
+}
+
+.suggested-task form {
+  margin-top: 150px;
+  text-align: center;
+}
+
+.suggested-task form h2 {
+  text-align: center;
+}
+
+.suggested-task form input[type='text'] {
+  display: inline-block;
+  font: 1rem 'Fira Sans', sans-serif;
+  background: white;
+  border: solid 1px grey;
+  width: 100%;
+  height: 30px;
+  margin: 7px 0;
+  color: black;
+}
+
+.suggested-task form button {
+  display: inline;
+  font: 1.5rem 'Fira Sans', sans-serif;
+  background: rgb(0, 0, 0);
+  border: solid 1px grey;
+  width: 100%;
+}
+
+.add-task {
+  display: grid;
+  width: 33%;
+  align-self: center;
+  padding: 5px;
+  align-items: center;
+  margin: 0 50px;
+  border: solid 2px rgb(153, 146, 160);
+}
+
+.mark-as-done {
+  padding: 4px;
+  background: grey;
+  margin: 5px 0;
+  font: 100;
+  color: wheat;
+}
+
+.completed-tasks {
+  display: grid;
+  width: 33%;
+  align-self: self-start;
+  padding: 5px;
+  align-items: center;
+  grid-gap: 5px;
+  border: solid 2px rgb(153, 146, 160);
+}
+
+.completed-tasks .card {
+  padding: 1rem 1.2rem;
+  /* background: rgba(var(--card-rgb), 0); */
+  border: solid 3px rgb(0, 255, 0);
+  transition: background 200ms, border 200ms;
+  margin: 3px 0;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 6rem;
+  /* min-height: 100vh; */
+}
+
+.grid {
+  display: grid;
+  /* grid-template-columns: repeat(4, minmax(25%, auto)); */
+  width: var(--max-width);
+  max-width: 100%;
+}
+
+/* .card {
+  padding: 1rem 1.2rem;
+  border-radius: var(--border-radius);
+  background: rgba(var(--card-rgb), 0);
+  border: 1px solid rgba(var(--card-border-rgb), 0);
+  transition: background 200ms, border 200ms;
+} */
+
+/* .card span {
+  display: inline-block;
+  transition: transform 200ms;
+}
+
+.card h2 {
+  font-weight: 600;
+  margin-bottom: 0.7rem;
+}
+
+.card p {
+  margin: 0;
+  opacity: 0.6;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  max-width: 30ch;
+} */
 
 .center {
   display: flex;

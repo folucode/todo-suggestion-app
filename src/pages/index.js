@@ -6,68 +6,93 @@ import { useEffect, useState } from 'react';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
+  const [refresh, setRefresh] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [suggestedTask, setSuggestedTask] = useState({});
+  const [completedTasks, setCompletedTasks] = useState([]);
 
   useEffect(() => {
+    getTasks();
+    getCompletedTasks();
     handleSuggestions();
-  }, [tasks]);
+  }, [refresh]);
 
-  const handleSuggestions = () => {
-    const pendingTasks = tasks.filter((task) => task.status === 'pending');
+  const getTasks = async () => {
+    const r = await fetch('https://task-suggestion-api.onrender.com/api/tasks');
+    const tasks = await r.json();
 
-    if (pendingTasks.length < 1) {
+    setTasks(tasks);
+  };
+
+  const getCompletedTasks = async () => {
+    const r = await fetch(
+      'https://task-suggestion-api.onrender.com/api/tasks/completed'
+    );
+    const tasks = await r.json();
+
+    setCompletedTasks(tasks);
+  };
+
+  const handleSuggestions = async () => {
+    const r = await fetch(
+      'https://task-suggestion-api.onrender.com/api/tasks/suggest'
+    );
+    const suggested = await r.json();
+
+    if (suggested.message == 'no task') {
       setSuggestedTask({});
       return;
     }
 
-    const randomNumber = Math.floor(Math.random() * pendingTasks.length);
-    const suggested = pendingTasks[randomNumber];
-
     setSuggestedTask({ ...suggested });
+
+    console.log(suggested);
   };
 
-  const handleAddTask = (event) => {
+  const handleAddTask = async (event) => {
     event.preventDefault();
-    const taskName = event.target.elements.taskName.value;
 
-    if (!taskName) {
-      alert('task name cannot be empty');
+    const title = event.target.elements.title.value;
+    const note = event.target.elements.note.value;
+
+    if (!title) {
+      alert('task title cannot be empty');
       return;
     }
 
-    setTasks([
-      ...tasks,
-      {
-        id: Math.floor(Math.random() * 100),
-        title: taskName,
-        note: '',
-        status: 'pending',
+    let t = await fetch('https://task-suggestion-api.onrender.com/api/tasks', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-    ]);
+      body: JSON.stringify({ title, note }),
+    }).then((r) => r.json());
+
+    setTasks([...tasks, t]);
 
     event.target.reset();
   };
 
-  const handleAddNote = (event, taskIndex) => {
+  const markAsDone = async (event, taskIndex) => {
     event.preventDefault();
-    const note = event.target.elements.note.value;
-    const task = tasks[taskIndex];
 
-    if (note) {
-      const newState = tasks.map((task) => {
-        if (task.id == taskIndex) {
-          return { ...task, note, status: 'done' };
-        }
+    const r = await fetch(
+      'https://task-suggestion-api.onrender.com/api/tasks/' +
+        taskIndex +
+        '/mark-as-done',
+      {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }
+    ).then((r) => r.json());
 
-        return task;
-      });
-
-      setTasks(newState);
-      event.target.reset();
+    if (r) {
+      setRefresh(true);
     }
-
-    console.log(tasks);
   };
 
   return (
@@ -79,44 +104,66 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={styles.main}>
-        <div className={styles.center}>
+        <div className={styles['pending-tasks']}>
+          <div className={styles.items}>
+            <h2 className={styles.header}>Pending Tasks</h2>
+            {tasks.map((task) => (
+              <a href='#' className={styles.card} key={task.taskID}>
+                <h2 className={inter.className}>{task.title}</h2>
+                <p className={inter.className}>{task.note}</p>
+                <p>
+                  <b>
+                    <u>Status:</u>
+                  </b>{' '}
+                  {task.status}
+                </p>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles['suggested-task']}>
+          <h2 className={styles.header}>Suggested Task</h2>
+          <a href='#' className={styles.card}>
+            <h2 className={inter.className}>{suggestedTask.title}</h2>
+            <p className={inter.className}>{suggestedTask.note}</p>
+            <p>
+              <b>
+                <u>Status:</u>
+              </b>{' '}
+              {suggestedTask.status}
+            </p>
+
+            <button
+              className={styles['mark-as-done']}
+              type='submit'
+              onClick={(e) => markAsDone(e, suggestedTask.taskID)}
+            >
+              Mark as done
+            </button>
+          </a>
+
           <form onSubmit={handleAddTask}>
-            <label htmlFor='taskName'>Add a task:</label>
-            <input id='taskName' name='taskName' type='text' />
+            <h2>Add a task:</h2>
+            <input id='title' name='title' type='text' /> <br></br>
+            <input id='note' name='note' type='text' /> <br></br>
             <button type='submit'>Add</button>
           </form>
         </div>
 
-        <div>
-          <h3>Suggested Task:</h3>
-          <div className={styles.grid}>
-            <a href='#' className={styles.card}>
-              <h2 className={inter.className}>{suggestedTask.title}</h2>
-              <p className={inter.className}>{suggestedTask.note}</p>
-              <p>Status: {suggestedTask.status}</p>
-              <p>id: {suggestedTask.id}</p>
-
-              <br></br>
-
-              <form
-                onSubmit={(event) => handleAddNote(event, suggestedTask.id)}
-              >
-                <label htmlFor='note'>Add a note:</label>
-                <input id='note' name='note' type='text' />
-                <button type='submit'>Add</button>
-              </form>
-            </a>
-          </div>
-        </div>
-
-        <div>
-          <h3>Tasks:</h3>
-          <div className={styles.grid}>
-            {tasks.map((task) => (
-              <a href='#' className={styles.card} key={task.id}>
+        <div className={styles['completed-tasks']}>
+          <div className={styles.items}>
+            <h2 className={styles.header}>Completed Tasks</h2>
+            {completedTasks.map((task) => (
+              <a href='#' className={styles.card} key={task.taskID}>
                 <h2 className={inter.className}>{task.title}</h2>
                 <p className={inter.className}>{task.note}</p>
-                <p>Status: {task.status}</p>
+                <p>
+                  <b>
+                    <u>Status:</u>
+                  </b>{' '}
+                  {task.status}
+                </p>
               </a>
             ))}
           </div>
