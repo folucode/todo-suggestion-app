@@ -95,6 +95,25 @@ export default function Home() {
     }
   };
 
+  const deleteTask = async (e, taskIndex) => {
+    e.preventDefault();
+
+    const r = await fetch(
+      'https://task-suggestion-api.onrender.com/api/tasks/' + taskIndex,
+      {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      }
+    ).then((r) => r.json());
+
+    if (r) {
+      setRefresh(true);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -117,6 +136,9 @@ export default function Home() {
                   </b>{' '}
                   {task.status}
                 </p>
+                <button type='button' onClick={(e) => deleteTask(e, task.taskID)}>
+                  Delete
+                </button>
               </a>
             ))}
           </div>

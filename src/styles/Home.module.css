@@ -8,6 +8,13 @@
   border: solid 2px rgb(153, 146, 160);
 }
 
+.pending-tasks button {
+  color: red;
+  padding: 5px;
+  background-color: white;
+  margin: 10px 0;
+}
+
 .items {
   display: grid;
   width: 100%;
