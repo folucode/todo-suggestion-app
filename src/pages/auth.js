@@ -9,14 +9,17 @@ export default function Home() {
     const username = event.target.elements.username.value;
     const password = event.target.elements.password.value;
 
-    const r = await fetch('http://localhost:3001/api/auth/login', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    });
+    const r = await fetch(
+      'http://task-suggestion-api.onrender.com/api/auth/login',
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      }
+    );
     const u = await r.json();
 
     localStorage.setItem('jwt', u.access_token);
