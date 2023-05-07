@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
 import { useEffect, useState } from 'react';
+import Router from 'next/router';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -12,6 +13,10 @@ export default function Home() {
   const [completedTasks, setCompletedTasks] = useState([]);
 
   useEffect(() => {
+    if (localStorage.getItem('jwt') == null) {
+      Router.push('/auth');
+    }
+
     getTasks();
     getCompletedTasks();
     handleSuggestions();
@@ -136,7 +141,10 @@ export default function Home() {
                   </b>{' '}
                   {task.status}
                 </p>
-                <button type='button' onClick={(e) => deleteTask(e, task.taskID)}>
+                <button
+                  type='button'
+                  onClick={(e) => deleteTask(e, task.taskID)}
+                >
                   Delete
                 </button>
               </a>
