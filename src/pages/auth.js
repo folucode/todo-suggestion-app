@@ -10,7 +10,7 @@ export default function Home() {
     const password = event.target.elements.password.value;
 
     const r = await fetch(
-      'http://task-suggestion-api.onrender.com/api/auth/login',
+      'https://task-suggestion-api.onrender.com/api/auth/login',
       {
         method: 'POST',
         headers: {
