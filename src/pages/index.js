@@ -23,15 +23,35 @@ export default function Home() {
   }, [refresh]);
 
   const getTasks = async () => {
-    const r = await fetch('https://task-suggestion-api.onrender.com/api/tasks');
+    const token = localStorage.getItem('jwt');
+    const r = await fetch(
+      'https://task-suggestion-api.onrender.com/api/tasks',
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const tasks = await r.json();
 
     setTasks(tasks);
   };
 
   const getCompletedTasks = async () => {
+    const token = localStorage.getItem('jwt');
     const r = await fetch(
-      'https://task-suggestion-api.onrender.com/api/tasks/completed'
+      'https://task-suggestion-api.onrender.com/api/tasks/completed',
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     const tasks = await r.json();
 
@@ -39,8 +59,17 @@ export default function Home() {
   };
 
   const handleSuggestions = async () => {
+    const token = localStorage.getItem('jwt');
     const r = await fetch(
-      'https://task-suggestion-api.onrender.com/api/tasks/suggest'
+      'https://task-suggestion-api.onrender.com/api/tasks/suggest',
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     const suggested = await r.json();
 
@@ -57,6 +86,7 @@ export default function Home() {
   const handleAddTask = async (event) => {
     event.preventDefault();
 
+    const token = localStorage.getItem('jwt');
     const title = event.target.elements.title.value;
     const note = event.target.elements.note.value;
 
@@ -70,6 +100,7 @@ export default function Home() {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ title, note }),
     }).then((r) => r.json());
@@ -82,6 +113,7 @@ export default function Home() {
   const markAsDone = async (event, taskIndex) => {
     event.preventDefault();
 
+    const token = localStorage.getItem('jwt');
     const r = await fetch(
       'https://task-suggestion-api.onrender.com/api/tasks/' +
         taskIndex +
@@ -91,6 +123,7 @@ export default function Home() {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
       }
     ).then((r) => r.json());
@@ -103,6 +136,7 @@ export default function Home() {
   const deleteTask = async (e, taskIndex) => {
     e.preventDefault();
 
+    const token = localStorage.getItem('jwt');
     const r = await fetch(
       'https://task-suggestion-api.onrender.com/api/tasks/' + taskIndex,
       {
@@ -110,6 +144,7 @@ export default function Home() {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
       }
     ).then((r) => r.json());
