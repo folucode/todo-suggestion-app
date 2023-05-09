@@ -10,7 +10,7 @@ export default function Home() {
     const password = event.target.elements.password.value;
 
     const r = await fetch(
-      'https://task-suggestion-api.onrender.com/api/auth/login',
+      'http://task-suggestion-api.onrender.com/api/auth/login',
       {
         method: 'POST',
         headers: {
@@ -22,9 +22,13 @@ export default function Home() {
     );
     const u = await r.json();
 
-    localStorage.setItem('jwt', u.access_token);
+    if (u.status == 401) {
+      alert('username/password mismatch!');
+    } else {
+      localStorage.setItem('jwt', u.access_token);
 
-    if (localStorage.getItem('jwt') != null) Router.push('/');
+      Router.push('/');
+    }
   };
 
   return (
