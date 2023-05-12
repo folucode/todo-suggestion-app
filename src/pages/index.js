@@ -1,8 +1,10 @@
 import Head from 'next/head';
 import { Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Router from 'next/router';
+import loader from '../../public/loader.svg';
+import Image from 'next/image';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -12,8 +14,13 @@ export default function Home() {
   const [suggestedTask, setSuggestedTask] = useState({});
   const [completedTasks, setCompletedTasks] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+
+  const editForm = useRef();
 
   useEffect(() => {
+    setLoading(true);
+
     if (localStorage.getItem('jwt') == null) {
       Router.push('/auth');
     }
@@ -44,6 +51,8 @@ export default function Home() {
 
     setTasks(tasks);
     setSuggestedTasks([...tasks]);
+
+    setLoading(false);
   };
 
   const getCompletedTasks = async () => {
@@ -64,6 +73,8 @@ export default function Home() {
     const tasks = await r.json();
 
     setCompletedTasks([...tasks]);
+
+    setLoading(false);
   };
 
   const suggestTask = () => {
@@ -74,6 +85,45 @@ export default function Home() {
     const suggestedTask = suggestedTasks.shift();
 
     setSuggestedTask({ ...suggestedTask });
+  };
+
+  const handleEditTask = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem('jwt');
+    const title = e.target.elements.title.value;
+    const note = e.target.elements.note.value;
+    const priority = e.target.elements.priority.value;
+    const taskID = e.target.elements.taskID.value;
+
+    if (!title) {
+      alert('task title cannot be empty');
+      return;
+    }
+
+    let t = await fetch(
+      `https://task-suggestion-api.onrender.com/api/tasks/${taskID}`,
+      {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ title, note, priority }),
+      }
+    ).then((r) => r.json());
+
+    setRefresh(!refresh);
+
+    e.target.reset();
+  };
+
+  const editTask = async (e, task) => {
+    editForm.current[0].value = task.title;
+    editForm.current[1].value = task.note;
+    editForm.current[2].value = task.priority;
+    editForm.current[3].value = task.taskID;
   };
 
   const handleAddTask = async (event) => {
@@ -148,6 +198,14 @@ export default function Home() {
     }
   };
 
+  if (isLoading == true) {
+    return (
+      <div className={styles.loader}>
+        <Image src={loader} width='300' className={styles.img} alt='Loader' />
+      </div>
+    );
+  }
+
   return (
     <>
       <Head>
@@ -156,6 +214,7 @@ export default function Home() {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
+
       <main className={styles.main}>
         <div className={styles['pending-tasks']}>
           <div className={styles.items}>
@@ -175,6 +234,9 @@ export default function Home() {
                   onClick={(e) => deleteTask(e, task.taskID)}
                 >
                   Delete
+                </button>
+                <button type='button' onClick={(e) => editTask(e, task)}>
+                  Edit
                 </button>
               </a>
             ))}
@@ -236,6 +298,40 @@ export default function Home() {
             />{' '}
             <br></br>
             <button type='submit'>Add</button>
+          </form>
+
+          <form
+            className={styles.form}
+            onSubmit={handleEditTask}
+            ref={editForm}
+          >
+            <h2>Edit a task:</h2>
+            <input
+              id='title'
+              name='title'
+              type='text'
+              placeholder='title'
+              className={styles.field}
+            />{' '}
+            <br></br>
+            <input
+              id='note'
+              name='note'
+              type='text'
+              placeholder='note'
+              className={styles.field}
+            />{' '}
+            <br></br>
+            <input
+              id='priority'
+              name='priority'
+              type='text'
+              placeholder='priority'
+              className={styles.field}
+            />{' '}
+            <input name='taskID' type='hidden' />
+            <br></br>
+            <button type='submit'>Update Task</button>
           </form>
         </div>
 
