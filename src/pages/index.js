@@ -7,10 +7,11 @@ import Router from 'next/router';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
-  const [refresh, setRefresh] = useState(false);
   const [tasks, setTasks] = useState([]);
+  const [suggestedTasks, setSuggestedTasks] = useState([]);
   const [suggestedTask, setSuggestedTask] = useState({});
   const [completedTasks, setCompletedTasks] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem('jwt') == null) {
@@ -19,8 +20,11 @@ export default function Home() {
 
     getTasks();
     getCompletedTasks();
-    handleSuggestions();
   }, [refresh]);
+
+  useEffect(() => {
+    suggestTask();
+  }, [suggestedTasks]);
 
   const getTasks = async () => {
     const token = localStorage.getItem('jwt');
@@ -35,13 +39,16 @@ export default function Home() {
         },
       }
     );
+
     const tasks = await r.json();
 
     setTasks(tasks);
+    setSuggestedTasks([...tasks]);
   };
 
   const getCompletedTasks = async () => {
     const token = localStorage.getItem('jwt');
+
     const r = await fetch(
       'https://task-suggestion-api.onrender.com/api/tasks/completed',
       {
@@ -53,34 +60,20 @@ export default function Home() {
         },
       }
     );
+
     const tasks = await r.json();
 
-    setCompletedTasks(tasks);
+    setCompletedTasks([...tasks]);
   };
 
-  const handleSuggestions = async () => {
-    const token = localStorage.getItem('jwt');
-    const r = await fetch(
-      'https://task-suggestion-api.onrender.com/api/tasks/suggest',
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    const suggested = await r.json();
+  const suggestTask = () => {
+    if (suggestedTasks.length == 0) setSuggestedTasks([...tasks]);
 
-    if (suggested.message == 'no task') {
-      setSuggestedTask({});
-      return;
-    }
+    suggestedTasks.sort((task1, task2) => task1.priority - task2.priority);
 
-    setSuggestedTask({ ...suggested });
+    const suggestedTask = suggestedTasks.shift();
 
-    console.log(suggested);
+    setSuggestedTask({ ...suggestedTask });
   };
 
   const handleAddTask = async (event) => {
@@ -89,6 +82,7 @@ export default function Home() {
     const token = localStorage.getItem('jwt');
     const title = event.target.elements.title.value;
     const note = event.target.elements.note.value;
+    const priority = event.target.elements.priority.value;
 
     if (!title) {
       alert('task title cannot be empty');
@@ -102,7 +96,7 @@ export default function Home() {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ title, note }),
+      body: JSON.stringify({ title, note, priority }),
     }).then((r) => r.json());
 
     setTasks([...tasks, t]);
@@ -129,7 +123,7 @@ export default function Home() {
     ).then((r) => r.json());
 
     if (r) {
-      setRefresh(true);
+      setRefresh(!refresh);
     }
   };
 
@@ -150,7 +144,7 @@ export default function Home() {
     ).then((r) => r.json());
 
     if (r) {
-      setRefresh(true);
+      setRefresh(!refresh);
     }
   };
 
@@ -206,12 +200,41 @@ export default function Home() {
             >
               Mark as done
             </button>
+            <button
+              className={styles['mark-as-done']}
+              type=''
+              onClick={suggestTask}
+            >
+              Suggest another task
+            </button>
           </a>
 
-          <form onSubmit={handleAddTask}>
+          <form className={styles.form} onSubmit={handleAddTask}>
             <h2>Add a task:</h2>
-            <input id='title' name='title' type='text' /> <br></br>
-            <input id='note' name='note' type='text' /> <br></br>
+            <input
+              id='title'
+              name='title'
+              type='text'
+              placeholder='title'
+              className={styles.field}
+            />{' '}
+            <br></br>
+            <input
+              id='note'
+              name='note'
+              type='text'
+              placeholder='note'
+              className={styles.field}
+            />{' '}
+            <br></br>
+            <input
+              id='priority'
+              name='priority'
+              type='text'
+              placeholder='priority'
+              className={styles.field}
+            />{' '}
+            <br></br>
             <button type='submit'>Add</button>
           </form>
         </div>
