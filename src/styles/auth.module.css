@@ -1,0 +1,72 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container span {
+  color: brown;
+  font-weight: bolder;
+  text-decoration: underline;
+}
+
+.container h1 {
+  margin-bottom: 30px;
+  color: black;
+}
+
+.container label {
+  color: black;
+  width: 350px;
+  margin-top: 20px;
+}
+
+.container select {
+  width: 350px;
+  height: 50px;
+  background-color: whitesmoke;
+  border-radius: 5px;
+  border: 1px solid gray;
+  color: black;
+  font-size: larger;
+  padding: 10px;
+  margin: 5px;
+}
+
+.container input {
+  width: 350px;
+  height: 50px;
+  background-color: whitesmoke;
+  border-radius: 5px;
+  border: 1px solid gray;
+  color: black;
+  font-size: larger;
+  padding: 10px;
+  margin: 5px;
+}
+
+.container input:focus {
+  outline-color: purple;
+  outline-width: 1.5px;
+  outline-style: solid;
+  border: none;
+}
+
+.container button {
+  width: 350px;
+  height: 50px;
+  background-color: purple;
+  border-radius: 5px;
+  border: none;
+  color: whitesmoke;
+  padding: 10px;
+  margin-top: 20px;
+  font-size: larger;
+}
+
+.container button:hover {
+  cursor: pointer;
+  background-color: rgb(168, 14, 168);
+}

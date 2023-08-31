@@ -5,6 +5,12 @@ import { useEffect, useRef, useState } from 'react';
 import Router from 'next/router';
 import loader from '../../public/loader.svg';
 import Image from 'next/image';
+import moment from 'moment-timezone';
+import DateTimePicker from 'react-datetime-picker';
+import 'react-datetime-picker/dist/DateTimePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-clock/dist/Clock.css';
+import { io } from 'socket.io-client';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,22 +21,34 @@ export default function Home() {
   const [completedTasks, setCompletedTasks] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [value, onChange] = useState(new Date());
 
   const editForm = useRef();
 
   useEffect(() => {
-    setLoading(true);
+    const socket = io('http://localhost:3001');
 
-    if (localStorage.getItem('jwt') == null) {
-      Router.push('/auth');
-    }
+    // socket.emit('updateTodo', {
+    //   taskId: '64e4af451f572d0bdd372402',
+    //   title: 'testing my websocket',
+    // });
 
-    getTasks();
-    getCompletedTasks();
-  }, [refresh]);
+    socket.on('completeTodo', function (data) {
+      console.log(data);
+    });
+
+    // setLoading(true);
+
+    // if (localStorage.getItem('jwt') == null) {
+    //   Router.push('/auth');
+    // }
+
+    // getTasks();
+    // getCompletedTasks();
+  }, []);
 
   useEffect(() => {
-    suggestTask();
+    // suggestTask();
   }, [suggestedTasks]);
 
   const getTasks = async () => {
@@ -219,6 +237,9 @@ export default function Home() {
         <div className={styles['pending-tasks']}>
           <div className={styles.items}>
             <h2 className={styles.header}>Pending Tasks</h2>
+            <div>
+              <DateTimePicker onChange={onChange} value={value} />
+            </div>
             {tasks.map((task) => (
               <a href='#' className={styles.card} key={task.taskID}>
                 <h2 className={inter.className}>{task.title}</h2>
