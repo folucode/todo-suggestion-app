@@ -12,7 +12,7 @@ export default function SignUp() {
   const [timezone, setTimezone] = useState('');
 
   useEffect(() => {
-    if (localStorage.getItem('jwt') != null) {
+    if (localStorage.getItem('user-access-token') != null) {
       Router.push('/');
     }
   }, []);
