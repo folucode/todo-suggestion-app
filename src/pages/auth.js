@@ -2,6 +2,7 @@ import Head from 'next/head';
 import authStyles from '../styles/auth.module.css';
 import { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
+import { Router } from 'next/router';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
