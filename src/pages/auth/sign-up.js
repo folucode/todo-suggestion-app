@@ -1,8 +1,9 @@
 import Head from 'next/head';
-import authStyles from '../styles/auth.module.css';
+import authStyles from '../../styles/auth.module.css';
 import { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
 import Router from 'next/router';
+import Link from 'next/link';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ export default function SignUp() {
   const [timezone, setTimezone] = useState('');
 
   useEffect(() => {
-    if (localStorage.getItem('user-access-token') != null) {
+    if (localStorage.getItem('tasuke-user-jwt') != null) {
       Router.push('/');
     }
   }, []);
@@ -25,7 +26,7 @@ export default function SignUp() {
     }
 
     const data = await fetch(
-      'https://task-suggestion-api.onrender.com/api/auth/login',
+      'https://task-suggestion-api.onrender.com/api/auth/register',
       {
         method: 'POST',
         headers: {
@@ -38,7 +39,7 @@ export default function SignUp() {
 
     const result = await data.json();
 
-    localStorage.setItem('jwt', result.access_token);
+    localStorage.setItem('tasuke-user-jwt', result.accessToken);
 
     Router.push('/');
   };
@@ -110,6 +111,12 @@ export default function SignUp() {
         <button onClick={handleAuth} type='submit'>
           Sign up with Email
         </button>
+        <p>
+          Already signed up?{' '}
+          <Link href='/auth/login' className={authStyles.link}>
+            Go to login
+          </Link>
+        </p>
       </div>
     </>
   );

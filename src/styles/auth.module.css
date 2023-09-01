@@ -70,3 +70,12 @@
   cursor: pointer;
   background-color: rgb(168, 14, 168);
 }
+
+.container p {
+  margin-top: 20px;
+  color: black;
+}
+
+.link {
+  text-decoration: underline;
+}
