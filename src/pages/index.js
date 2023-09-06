@@ -23,7 +23,7 @@ export default function Home() {
   const toggleAddTask = () => setIsAddTaskShow(!isAddTaskShow);
 
   useEffect(() => {
-    if (localStorage.getItem('tasuke-user') == 'undefined') {
+    if (localStorage.getItem('tasuke-user') == null) {
       Router.push('/auth/login');
     }
 

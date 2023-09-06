@@ -8,7 +8,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    if (localStorage.getItem('tasuke-user') !== 'undefined') {
+    if (localStorage.getItem('tasuke-user') !== null) {
       Router.push('/');
     }
   }, []);
@@ -20,14 +20,17 @@ export default function Login() {
       alert('username and password cannot be empty!');
     }
 
-    const data = await fetch(`${process.env.NEXT_PUBLIC_PROD_API_URL}/api/auth/login`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    });
+    const data = await fetch(
+      `${process.env.NEXT_PUBLIC_PROD_API_URL}/api/auth/login`,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      }
+    );
 
     const result = await data.json();
 
