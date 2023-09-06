@@ -62,7 +62,7 @@ export default function TaskForm(props) {
       recurringFrequency,
     };
 
-    await fetch('http://localhost:3001/api/tasks', {
+    await fetch(`${process.env.LOCAL_PROD_URL}/tasks`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -103,7 +103,7 @@ export default function TaskForm(props) {
       recurringFrequency,
     };
 
-    await fetch(`http://localhost:3001/api/tasks/${initialValues.taskId}`, {
+    await fetch(`${process.env.LOCAL_PROD_URL}/api/tasks/${initialValues.taskId}`, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',

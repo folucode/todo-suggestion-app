@@ -27,7 +27,7 @@ export default function Home() {
       Router.push('/auth/login');
     }
 
-    const socket = io('http://localhost:3001');
+    const socket = io(process.env.LOCAL_PROD_URL);
 
     socket.on('connect', function () {
       console.log('socket.io connected...');
@@ -90,7 +90,7 @@ export default function Home() {
   const getTasks = async () => {
     const user = JSON.parse(localStorage.getItem('tasuke-user'));
 
-    const r = await fetch('http://localhost:3001/api/tasks', {
+    const r = await fetch(`${process.env.LOCAL_PROD_URL}/api/tasks`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
