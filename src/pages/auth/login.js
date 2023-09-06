@@ -35,10 +35,6 @@ export default function Login() {
     const result = await data.json();
 
     localStorage.setItem('tasuke-user', JSON.stringify(result.data));
-    console.log(
-      localStorage.getItem('tasuke-user'),
-      JSON.stringify(result.data)
-    );
 
     Router.push('/');
   };
