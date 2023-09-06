@@ -27,7 +27,7 @@ export default function Home() {
       Router.push('/auth/login');
     }
 
-    // console.log(process.env.BASE_PROD_API_URL);
+    console.log(process.env.NEXT_PUBLIC_PROD_API_URL);
 
     const socket = io(process.env.NEXT_PUBLIC_PROD_API_URL);
 
