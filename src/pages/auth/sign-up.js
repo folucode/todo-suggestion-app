@@ -26,7 +26,7 @@ export default function SignUp() {
     }
 
     const data = await fetch(
-      'https://task-suggestion-api.onrender.com/api/auth/register',
+      `${process.env.NEXT_PUBLIC_PROD_API_URL}/api/auth/register`,
       {
         method: 'POST',
         headers: {
@@ -39,7 +39,7 @@ export default function SignUp() {
 
     const result = await data.json();
 
-    localStorage.setItem('tasuke-user', result.data);
+    localStorage.setItem('tasuke-user', JSON.stringify(result.data));
 
     Router.push('/');
   };
