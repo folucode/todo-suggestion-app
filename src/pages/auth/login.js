@@ -20,7 +20,7 @@ export default function Login() {
       alert('username and password cannot be empty!');
     }
 
-    const data = await fetch(`${process.env.LOCAL_PROD_URL}/api/auth/login`, {
+    const data = await fetch(`${process.env.PROD_API_URL}/api/auth/login`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

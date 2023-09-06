@@ -61,7 +61,7 @@ export function TaskCard(props) {
   const deleteTask = async (e, taskId) => {
     e.preventDefault();
 
-    await fetch(`${process.env.LOCAL_PROD_URL}/tasks/${taskId}`, {
+    await fetch(`${process.env.PROD_API_URL}/tasks/${taskId}`, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
@@ -77,7 +77,7 @@ export function TaskCard(props) {
     event.preventDefault();
 
     const r = await fetch(
-      `${process.env.LOCAL_PROD_URL}/tasks/${taskId}/mark-as-done`,
+      `${process.env.PROD_API_URL}/tasks/${taskId}/mark-as-done`,
       {
         method: 'PUT',
         headers: {

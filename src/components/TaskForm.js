@@ -103,7 +103,7 @@ export default function TaskForm(props) {
       recurringFrequency,
     };
 
-    await fetch(`${process.env.LOCAL_PROD_URL}/api/tasks/${initialValues.taskId}`, {
+    await fetch(`${process.env.PROD_API_URL}/api/tasks/${initialValues.taskId}`, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
