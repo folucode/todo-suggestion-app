@@ -39,7 +39,7 @@ export default function SignUp() {
 
     const result = await data.json();
 
-    localStorage.setItem('tasuke-user-jwt', result.accessToken);
+    localStorage.setItem('tasuke-user', result.data);
 
     Router.push('/');
   };

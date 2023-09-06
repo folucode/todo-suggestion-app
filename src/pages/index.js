@@ -1,50 +1,86 @@
 import Head from 'next/head';
-import { Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Router from 'next/router';
 import loader from '../../public/loader.svg';
 import Image from 'next/image';
-import moment from 'moment-timezone';
-import DateTimePicker from 'react-datetime-picker';
-import 'react-datetime-picker/dist/DateTimePicker.css';
-import 'react-calendar/dist/Calendar.css';
-import 'react-clock/dist/Clock.css';
 import { io } from 'socket.io-client';
-
-const inter = Inter({ subsets: ['latin'] });
+import Sidebar from '@/components/Sidebar';
+import TaskForm from '@/components/TaskForm';
+import { TaskCard } from '@/components/TaskCard';
 
 export default function Home() {
-  const [tasks, setTasks] = useState([]);
+  const [pendingTasks, setPendingTasks] = useState([]);
   const [suggestedTasks, setSuggestedTasks] = useState([]);
   const [suggestedTask, setSuggestedTask] = useState({});
   const [completedTasks, setCompletedTasks] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [value, onChange] = useState(new Date());
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isAddTaskShow, setIsAddTaskShow] = useState(false);
 
-  const editForm = useRef();
+  const toggleAddTask = () => setIsAddTaskShow(!isAddTaskShow);
 
   useEffect(() => {
+    if (localStorage.getItem('tasuke-user') == 'undefined') {
+      Router.push('/auth/login');
+    }
+
     const socket = io('http://localhost:3001');
 
-    // socket.emit('updateTodo', {
-    //   taskId: '64e4af451f572d0bdd372402',
-    //   title: 'testing my websocket',
-    // });
-
-    socket.on('completeTodo', function (data) {
-      console.log(data);
+    socket.on('connect', function () {
+      console.log('socket.io connected...');
+      getTasks();
     });
 
-    // setLoading(true);
+    socket.on('createTask', function (data) {
+      if (data.status == 'success') {
+        getTasks();
+      } else {
+        console.log(data);
+      }
+    });
 
-    // if (localStorage.getItem('jwt') == null) {
-    //   Router.push('/auth');
-    // }
+    socket.on('updateTask', function (data) {
+      if (data.status == 'success') {
+        getTasks();
+      } else {
+        console.log(data);
+      }
+    });
 
-    // getTasks();
-    // getCompletedTasks();
+    socket.on('deleteTask', function (data) {
+      if (data.status == 'success') {
+        if (data.data.taskStatus == 'Pending') {
+          let removedTaskIndex = pendingTasks.findIndex(
+            (task) => (task.taskId = data.data.taskId)
+          );
+
+          pendingTasks.splice(removedTaskIndex, 1);
+        } else {
+          let removedTaskIndex = completedTasks.findIndex(
+            (task) => (task.taskId = data.data.taskId)
+          );
+
+          completedTasks.splice(removedTaskIndex, 1);
+        }
+      } else {
+        console.log(data);
+      }
+    });
+
+    socket.on('completeTask', function (data) {
+      if (data.status == 'success') {
+        let task = pendingTasks.find(
+          (task) => (task.taskId = data.data.taskId)
+        );
+
+        completedTasks.push(task);
+      } else {
+        console.log(data);
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -52,47 +88,39 @@ export default function Home() {
   }, [suggestedTasks]);
 
   const getTasks = async () => {
-    const token = localStorage.getItem('jwt');
-    const r = await fetch(
-      'https://task-suggestion-api.onrender.com/api/tasks',
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const user = JSON.parse(localStorage.getItem('tasuke-user'));
+
+    const r = await fetch('http://localhost:3001/api/tasks', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.accessToken}`,
+      },
+    });
 
     const tasks = await r.json();
 
-    setTasks(tasks);
-    setSuggestedTasks([...tasks]);
+    if (tasks.data.length < 1) {
+      setPendingTasks([]);
+      setCompletedTasks([]);
+      return;
+    }
 
-    setLoading(false);
-  };
+    const pending = tasks.data.filter((task) => task._id == 'Pending');
+    const completed = tasks.data.filter((task) => task._id == 'Completed');
 
-  const getCompletedTasks = async () => {
-    const token = localStorage.getItem('jwt');
+    if (pending.length < 1) {
+      setPendingTasks([]);
+    } else {
+      setPendingTasks(pending[0].tasks);
+    }
 
-    const r = await fetch(
-      'https://task-suggestion-api.onrender.com/api/tasks/completed',
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    const tasks = await r.json();
-
-    setCompletedTasks([...tasks]);
-
-    setLoading(false);
+    if (completed.length < 1) {
+      setCompletedTasks([]);
+    } else {
+      setCompletedTasks(completed[0].tasks);
+    }
   };
 
   const suggestTask = () => {
@@ -105,275 +133,94 @@ export default function Home() {
     setSuggestedTask({ ...suggestedTask });
   };
 
-  const handleEditTask = async (e) => {
-    e.preventDefault();
-
-    const token = localStorage.getItem('jwt');
-    const title = e.target.elements.title.value;
-    const note = e.target.elements.note.value;
-    const priority = e.target.elements.priority.value;
-    const taskID = e.target.elements.taskID.value;
-
-    if (!title) {
-      alert('task title cannot be empty');
-      return;
-    }
-
-    let t = await fetch(
-      `https://task-suggestion-api.onrender.com/api/tasks/${taskID}`,
-      {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ title, note, priority }),
-      }
-    ).then((r) => r.json());
-
-    setRefresh(!refresh);
-
-    e.target.reset();
-  };
-
-  const editTask = async (e, task) => {
-    editForm.current[0].value = task.title;
-    editForm.current[1].value = task.note;
-    editForm.current[2].value = task.priority;
-    editForm.current[3].value = task.taskID;
-  };
-
-  const handleAddTask = async (event) => {
-    event.preventDefault();
-
-    const token = localStorage.getItem('jwt');
-    const title = event.target.elements.title.value;
-    const note = event.target.elements.note.value;
-    const priority = event.target.elements.priority.value;
-
-    if (!title) {
-      alert('task title cannot be empty');
-      return;
-    }
-
-    let t = await fetch('https://task-suggestion-api.onrender.com/api/tasks', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ title, note, priority }),
-    }).then((r) => r.json());
-
-    setTasks([...tasks, t]);
-
-    event.target.reset();
-  };
-
-  const markAsDone = async (event, taskIndex) => {
-    event.preventDefault();
-
-    const token = localStorage.getItem('jwt');
-    const r = await fetch(
-      'https://task-suggestion-api.onrender.com/api/tasks/' +
-        taskIndex +
-        '/mark-as-done',
-      {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    ).then((r) => r.json());
-
-    if (r) {
-      setRefresh(!refresh);
-    }
-  };
-
-  const deleteTask = async (e, taskIndex) => {
-    e.preventDefault();
-
-    const token = localStorage.getItem('jwt');
-    const r = await fetch(
-      'https://task-suggestion-api.onrender.com/api/tasks/' + taskIndex,
-      {
-        method: 'DELETE',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    ).then((r) => r.json());
-
-    if (r) {
-      setRefresh(!refresh);
-    }
-  };
-
-  if (isLoading == true) {
-    return (
-      <div className={styles.loader}>
-        <Image src={loader} width='300' className={styles.img} alt='Loader' />
-      </div>
-    );
-  }
-
   return (
     <>
       <Head>
-        <title>Create Task App</title>
-        <meta name='description' content='Generated by create next app' />
+        <title>Tasuke</title>
+        <meta name='description' content='Task management application' />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <link rel='icon' href='/favicon.ico' />
+        <link rel='icon' href='' />
       </Head>
 
-      <main className={styles.main}>
-        <div className={styles['pending-tasks']}>
-          <div className={styles.items}>
-            <h2 className={styles.header}>Pending Tasks</h2>
-            <div>
-              <DateTimePicker onChange={onChange} value={value} />
-            </div>
-            {tasks.map((task) => (
-              <a href='#' className={styles.card} key={task.taskID}>
-                <h2 className={inter.className}>{task.title}</h2>
-                <p className={inter.className}>{task.note}</p>
-                <p>
-                  <b>
-                    <u>Status:</u>
-                  </b>{' '}
-                  {task.status}
-                </p>
-                <button
-                  type='button'
-                  onClick={(e) => deleteTask(e, task.taskID)}
-                >
-                  Delete
-                </button>
-                <button type='button' onClick={(e) => editTask(e, task)}>
-                  Edit
-                </button>
-              </a>
-            ))}
+      <div className={styles.page}>
+        <div className={styles.navigation}>
+          <div className={styles.left_group}>
+            <svg
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className={styles.menu}
+              xmlns='http://www.w3.org/2000/svg'
+              viewBox='0 -960 960 960'
+            >
+              <path d='M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z' />
+            </svg>
+            <input type='text' name='search' className={styles.search} />
+          </div>
+
+          <div className={styles.right_group}>
+            <svg
+              className={styles.add}
+              xmlns='http://www.w3.org/2000/svg'
+              height='24'
+              viewBox='0 -960 960 960'
+              width='24'
+              onClick={toggleAddTask}
+            >
+              <path d='M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z' />
+            </svg>
+            <svg
+              className={styles.notification}
+              xmlns='http://www.w3.org/2000/svg'
+              viewBox='0 -960 960 960'
+            >
+              <path d='M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z' />
+            </svg>
           </div>
         </div>
 
-        <div className={styles['suggested-task']}>
-          <h2 className={styles.header}>Suggested Task</h2>
-          <a href='#' className={styles.card}>
-            <h2 className={inter.className}>{suggestedTask.title}</h2>
-            <p className={inter.className}>{suggestedTask.note}</p>
-            <p>
-              <b>
-                <u>Status:</u>
-              </b>{' '}
-              {suggestedTask.status}
-            </p>
-
-            <button
-              className={styles['mark-as-done']}
-              type='submit'
-              onClick={(e) => markAsDone(e, suggestedTask.taskID)}
-            >
-              Mark as done
-            </button>
-            <button
-              className={styles['mark-as-done']}
-              type=''
-              onClick={suggestTask}
-            >
-              Suggest another task
-            </button>
-          </a>
-
-          <form className={styles.form} onSubmit={handleAddTask}>
-            <h2>Add a task:</h2>
-            <input
-              id='title'
-              name='title'
-              type='text'
-              placeholder='title'
-              className={styles.field}
-            />{' '}
-            <br></br>
-            <input
-              id='note'
-              name='note'
-              type='text'
-              placeholder='note'
-              className={styles.field}
-            />{' '}
-            <br></br>
-            <input
-              id='priority'
-              name='priority'
-              type='text'
-              placeholder='priority'
-              className={styles.field}
-            />{' '}
-            <br></br>
-            <button type='submit'>Add</button>
-          </form>
-
-          <form
-            className={styles.form}
-            onSubmit={handleEditTask}
-            ref={editForm}
+        <main className={styles.main}>
+          <Sidebar isSidebarOpen={isSidebarOpen} />
+          <div
+            className={styles['tasks-area']}
+            style={{ marginLeft: isSidebarOpen ? '300px' : '0' }}
           >
-            <h2>Edit a task:</h2>
-            <input
-              id='title'
-              name='title'
-              type='text'
-              placeholder='title'
-              className={styles.field}
-            />{' '}
-            <br></br>
-            <input
-              id='note'
-              name='note'
-              type='text'
-              placeholder='note'
-              className={styles.field}
-            />{' '}
-            <br></br>
-            <input
-              id='priority'
-              name='priority'
-              type='text'
-              placeholder='priority'
-              className={styles.field}
-            />{' '}
-            <input name='taskID' type='hidden' />
-            <br></br>
-            <button type='submit'>Update Task</button>
-          </form>
-        </div>
+            <h1>Inbox</h1>
 
-        <div className={styles['completed-tasks']}>
-          <div className={styles.items}>
-            <h2 className={styles.header}>Completed Tasks</h2>
-            {completedTasks.map((task) => (
-              <a href='#' className={styles.card} key={task.taskID}>
-                <h2 className={inter.className}>{task.title}</h2>
-                <p className={inter.className}>{task.note}</p>
-                <p>
-                  <b>
-                    <u>Status:</u>
-                  </b>{' '}
-                  {task.status}
-                </p>
-              </a>
-            ))}
+            <div className={styles['tasks-sections']}>
+              <div className={styles.section}>
+                <h2>Pending Tasks</h2>
+                {pendingTasks.map((task, index) => (
+                  <TaskCard
+                    index={task.taskId}
+                    task={task}
+                    dueDate={task.dueDate}
+                    key={index}
+                  />
+                ))}
+              </div>
+              <div className={styles.section}>
+                <h2>Completed Tasks</h2>
+                {completedTasks.map((task, index) => (
+                  <TaskCard
+                    index={task.taskId}
+                    task={task}
+                    dueDate={task.dueDate}
+                    key={index}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+
+        {isAddTaskShow && (
+          <TaskForm
+            initialValues={{}}
+            isEdit={false}
+            isAddTaskShow={isAddTaskShow}
+            toggleAddTask={toggleAddTask}
+          />
+        )}
+      </div>
     </>
   );
 }

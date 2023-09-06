@@ -1,0 +1,69 @@
+.task-card {
+  background-color: #323131;
+  height: auto;
+  padding: 5px;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: 5px solid #323131;
+}
+
+.task-card span {
+  font-size: small;
+  margin-left: 35px;
+}
+
+.task-card .task-description {
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 275px;
+  margin-left: 35px;
+  font-size: small;
+  text-overflow: ellipsis;
+}
+
+.task-title {
+  display: flex;
+  max-width: 350px;
+  overflow: hidden;
+}
+
+.task-title svg {
+  fill: white;
+}
+
+.task-title svg:hover {
+  fill: lightblue;
+  cursor: pointer;
+}
+
+.task-title h3 {
+  margin: 0 10px;
+  font-size: 20px;
+  font-size: large;
+}
+
+.card-more {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(70, 88, 104);
+  width: 200px;
+  border-radius: 5px;
+  position: absolute;
+  margin-left: -100px;
+  margin-top: -10px;
+}
+
+.card-more-item {
+  display: flex;
+  color: black;
+  margin: 8px 5px;
+}
+
+.card-more-item:hover {
+  cursor: pointer;
+}
+
+.card-more-item p {
+  margin-left: 15px;
+  align-self: center;
+}

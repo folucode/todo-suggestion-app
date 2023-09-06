@@ -8,7 +8,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    if (localStorage.getItem('tasuke-user-jwt') != null) {
+    if (localStorage.getItem('tasuke-user') !== 'undefined') {
       Router.push('/');
     }
   }, []);
@@ -21,7 +21,7 @@ export default function Login() {
     }
 
     const data = await fetch(
-      'https://task-suggestion-api.onrender.com/api/auth/login',
+      'http://localhost:3001/api/auth/login',
       {
         method: 'POST',
         headers: {
@@ -34,9 +34,7 @@ export default function Login() {
 
     const result = await data.json();
 
-    console.log(result);
-
-    localStorage.setItem('tasuke-user-jwt', result.accessToken);
+    localStorage.setItem('tasuke-user', JSON.stringify(result.data));
 
     Router.push('/');
   };
