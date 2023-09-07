@@ -4,77 +4,11 @@
   height: 100vh;
 }
 
-.page .navigation {
-  display: flex;
-  flex-direction: row;
-  background-color: darkgray;
-  justify-content: space-between;
-}
-
-.page .navigation .left_group {
-  display: flex;
-  align-items: flex-start;
-}
-
-.page .navigation .right_group {
-  display: flex;
-}
-
-.page .menu {
-  padding: 5px;
-  height: 40px;
-  width: 40px;
-  margin: 5px 20px;
-  border-radius: 3px;
-}
-
-.menu:hover {
-  background-color: lightgray;
-  color: wheat;
-  cursor: pointer;
-}
-
-.page .search {
-  background-color: white;
-  border-radius: 3px;
-  height: 30px;
-  border: none;
-  justify-self: flex-start;
-  align-self: center;
-}
-
-.search:focus {
-  outline-color: lightgray;
-  outline-width: 1.5px;
-  outline-style: solid;
-  border: none;
-}
-
-.page .notification {
-  padding: 5px;
-  height: 40px;
-  width: 40px;
-  margin: 5px 20px;
-  border-radius: 3px;
-}
-
-.page .add {
-  padding: 5px;
-  height: 40px;
-  width: 40px;
-  margin: 5px 0;
-  border-radius: 3px;
-}
-
-.page .add:hover {
-  cursor: pointer;
-}
-
 .main {
   display: flex;
 }
 
-.main .tasks-area {
+.main .main-area {
   display: flex;
   flex-direction: column;
   margin-left: 300px;

@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import TaskForm from './TaskForm';
 import momentTZ from 'moment-timezone';
 
-export function TaskCard(props) {
+export default function TaskCard(props) {
   const { index, task } = props;
 
   const [showMore, setShowMore] = useState(false);

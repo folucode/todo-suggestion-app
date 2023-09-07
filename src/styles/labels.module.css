@@ -1,0 +1,180 @@
+.label-area {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+.label-area p {
+  color: black;
+}
+
+.label-area .header {
+  display: flex;
+  border-bottom: 1px solid lightblue;
+  margin-top: 15px;
+  padding-bottom: 5px;
+  font-size: larger;
+}
+
+.label-area .header img {
+  margin-left: auto;
+}
+
+.label-area .header img:hover {
+  background-color: gray;
+  border-radius: 3px;
+  transition: ease-in 0.2s;
+  cursor: pointer;
+}
+
+.individual-label {
+  border-bottom: 1px solid lightblue;
+  width: 500px;
+  display: flex;
+  padding-bottom: 3px;
+  padding: 10px 0;
+}
+
+.individual-label img:hover {
+  cursor: pointer;
+}
+
+.add-label-container {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  background-color: bisque;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  border-radius: 5px;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.35s ease-out;
+}
+
+.show-add-label-container {
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.35s ease-out;
+}
+
+.add-label-header {
+  display: flex;
+  border-bottom: 1px solid black;
+  padding: 5px;
+  font-size: x-large;
+  color: black;
+}
+
+.add-label-input-area {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.add-label-input {
+  display: flex;
+  flex-direction: column;
+  color: black;
+  margin: 5px 0;
+}
+
+.input-name {
+  border: 2px solid lightgoldenrodyellow;
+  outline-style: none;
+  outline-width: 0px;
+  border-radius: 3px;
+  height: 30px;
+  padding: 5px;
+}
+
+.input-color {
+  display: flex;
+  border-radius: 3px;
+  border: 2px solid lightgoldenrodyellow;
+  padding: 5px;
+  font-size: small;
+  line-height: 1.85;
+}
+
+.input-name:focus {
+  outline: solid 2px lightgreen;
+  border: none;
+  transition: outline ease-in 0.25s;
+}
+
+.add-label-footer {
+  display: flex;
+  padding: 10px;
+  justify-content: flex-end;
+  border-top: 1px solid black;
+}
+
+.add-label-footer button {
+  padding: 5px;
+  border-radius: 3px;
+  border: none;
+  margin: 0 5px;
+  text-align: center;
+  width: 65px;
+  font-size: medium;
+  color: black;
+}
+
+.add-label-footer button:first-child {
+  background-color: azure;
+}
+
+.add-label-footer button:first-child:hover {
+  background-color: rgb(254, 255, 255);
+  cursor: pointer;
+}
+
+.add-label-footer button:last-child {
+  background-color: brown;
+}
+
+.add-label-footer button:last-child:hover {
+  cursor: pointer;
+  background-color: rgb(190, 66, 66);
+}
+
+.label-color-list {
+  display: flex;
+  position: fixed;
+  flex-direction: column;
+  background-color: slategray;
+  border-radius: 3px;
+  top: 73%;
+  left: 3%;
+  width: 375px;
+  height: 250px;
+  overflow-y: auto;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s linear;
+}
+
+.show-label-color-list {
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.2s linear;
+}
+
+.individual-label-color {
+  display: flex;
+  padding: 5px 0;
+  font-size: smaller;
+  line-height: 1.85;
+}
+
+.individual-label-color:hover {
+  background-color: rgb(132, 146, 159);
+  cursor: pointer;
+}
+
+.active {
+  background-color: rgb(132, 146, 159);
+}

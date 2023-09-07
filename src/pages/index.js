@@ -7,7 +7,8 @@ import Image from 'next/image';
 import { io } from 'socket.io-client';
 import Sidebar from '@/components/Sidebar';
 import TaskForm from '@/components/TaskForm';
-import { TaskCard } from '@/components/TaskCard';
+import TaskCard from '@/components/TaskCard';
+import Navbar from '@/components/Navbar';
 
 export default function Home() {
   const [pendingTasks, setPendingTasks] = useState([]);
@@ -16,11 +17,12 @@ export default function Home() {
   const [completedTasks, setCompletedTasks] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [value, onChange] = useState(new Date());
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isAddTaskShow, setIsAddTaskShow] = useState(false);
 
   const toggleAddTask = () => setIsAddTaskShow(!isAddTaskShow);
+
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   useEffect(() => {
     if (localStorage.getItem('tasuke-user') == null) {
@@ -143,44 +145,12 @@ export default function Home() {
       </Head>
 
       <div className={styles.page}>
-        <div className={styles.navigation}>
-          <div className={styles.left_group}>
-            <svg
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className={styles.menu}
-              xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 -960 960 960'
-            >
-              <path d='M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z' />
-            </svg>
-            <input type='text' name='search' className={styles.search} />
-          </div>
-
-          <div className={styles.right_group}>
-            <svg
-              className={styles.add}
-              xmlns='http://www.w3.org/2000/svg'
-              height='24'
-              viewBox='0 -960 960 960'
-              width='24'
-              onClick={toggleAddTask}
-            >
-              <path d='M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z' />
-            </svg>
-            <svg
-              className={styles.notification}
-              xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 -960 960 960'
-            >
-              <path d='M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z' />
-            </svg>
-          </div>
-        </div>
+        <Navbar toggleSidebar={toggleSidebar} toggleAddTask={toggleAddTask} />
 
         <main className={styles.main}>
           <Sidebar isSidebarOpen={isSidebarOpen} />
           <div
-            className={styles['tasks-area']}
+            className={styles['main-area']}
             style={{ marginLeft: isSidebarOpen ? '300px' : '0' }}
           >
             <h1>Inbox</h1>
@@ -212,14 +182,12 @@ export default function Home() {
           </div>
         </main>
 
-        {isAddTaskShow && (
-          <TaskForm
-            initialValues={{}}
-            isEdit={false}
-            isAddTaskShow={isAddTaskShow}
-            toggleAddTask={toggleAddTask}
-          />
-        )}
+        <TaskForm
+          initialValues={{}}
+          isEdit={false}
+          isAddTaskShow={isAddTaskShow}
+          toggleAddTask={toggleAddTask}
+        />
       </div>
     </>
   );

@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import styles from '../styles/new-task.module.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import Image from 'next/image';
+import labelSVG from '../../public/svg/label.svg';
 
 export default function TaskForm(props) {
   const { initialValues, isAddTaskShow, toggleAddTask, isEdit } = props;
@@ -103,15 +105,18 @@ export default function TaskForm(props) {
       recurringFrequency,
     };
 
-    await fetch(`${process.env.NEXT_PUBLIC_PROD_API_URL}/api/tasks/${initialValues.taskId}`, {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.accessToken}`,
-      },
-      body: JSON.stringify(data),
-    });
+    await fetch(
+      `${process.env.NEXT_PUBLIC_PROD_API_URL}/api/tasks/${initialValues.taskId}`,
+      {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
     toggleAddTask();
   };
@@ -151,8 +156,8 @@ export default function TaskForm(props) {
 
   return (
     <div
-      className={`${
-        isAddTaskShow ? styles['new-task'] : styles['hide-new-task-view']
+      className={`${styles['new-task']} ${
+        isAddTaskShow ? styles['show-new-task-view'] : ''
       }`}
       ref={newTaskRef}
     >
@@ -207,14 +212,7 @@ export default function TaskForm(props) {
         </div>
 
         <div className={styles['individual-prop']}>
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            height='24'
-            viewBox='0 -960 960 960'
-            width='24'
-          >
-            <path d='M542.308-131.692q-11.529 11.461-28.573 11.461-17.043 0-28.504-11.461l-352-352q-6.385-6.385-9.808-14.02T120-514v-286q0-16.077 11.961-28.039Q143.923-840 160-840h286q7.769 0 15.452 3.166 7.683 3.167 13.317 8.526l352 352.231Q839-463.846 839.385-446.5q.384 17.346-11.077 28.808l-286 286ZM513.425-160l286.344-286-353.425-354H160v286l353.425 354ZM259.91-660q16.629 0 28.359-11.64Q300-683.281 300-699.909q0-16.63-11.64-28.36Q276.72-740 260.09-740q-16.629 0-28.359 11.64Q220-716.719 220-700.091q0 16.63 11.64 28.36Q243.28-660 259.91-660ZM160-800Z' />
-          </svg>
+          <Image src={labelSVG} alt='label icon' />
           <p>Label</p>
         </div>
       </div>

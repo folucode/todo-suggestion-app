@@ -9,14 +9,15 @@
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
-  opacity: 1;
-  transition: opacity 4s ease-in;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.35s ease-out;
 }
 
-.hide-new-task-view {
-  display: none;
-  opacity: 0;
-  transition: opacity 4s ease-out;
+.show-new-task-view {
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.35s ease-out;
 }
 
 .new-task input {

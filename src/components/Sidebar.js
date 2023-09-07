@@ -10,7 +10,7 @@ export default function Sidebar(props) {
       <ul>
         <li className={styles.active}>
           <div className={styles['list-item']}>
-            <a href=''>
+            <a href='/'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 height='24'
@@ -29,7 +29,7 @@ export default function Sidebar(props) {
         </li>
         <li>
           <div className={styles['list-item']}>
-            <a href=''>
+            <a href='/today'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 height='24'
@@ -48,7 +48,7 @@ export default function Sidebar(props) {
         </li>
         <li>
           <div className={styles['list-item']}>
-            <a href=''>
+            <a href='/upcoming'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 height='24'
@@ -67,7 +67,7 @@ export default function Sidebar(props) {
         </li>
         <li>
           <div className={styles['list-item']}>
-            <a href=''>
+            <a href='/labels'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 height='24'
