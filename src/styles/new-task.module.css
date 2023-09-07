@@ -80,16 +80,9 @@
   background-color: gray;
   margin-right: 5px;
   padding: 3px 6px;
-}
-
-.new-task .individual-prop svg {
-  vertical-align: middle;
-  display: inline-block;
-}
-
-.new-task .individual-prop p {
-  display: inline-block;
-  margin-left: 2.5px;
+  width: auto;
+  display: flex;
+  justify-content: center;
 }
 
 .new-task .new-task-footer {
@@ -112,6 +105,7 @@
 
 .new-task .new-task-footer button:hover {
   cursor: pointer;
+  background-color: bisque;
 }
 
 .new-task .new-task-footer button:disabled {
@@ -130,22 +124,59 @@
 .new-task .priorities {
   display: flex;
   position: fixed;
-  opacity: 1;
   width: 100px;
   flex-direction: column;
   border-radius: 3px;
   background-color: black;
-  top: 87.5%;
-  left: 13%;
-  transform: translate(-50%, -50%);
+  top: 73%;
+  left: 2%;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease-in-out;
+  border-radius: 4px;
 }
 
-.new-task .hide-priorities {
-  display: none;
-  opacity: 0;
+.new-task .show-priorities {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.2s ease-in-out;
 }
 
 .new-task .priorities .priority {
   display: flex;
   padding: 2px;
+  border-bottom: 1px solid red;
+}
+
+.new-task .priorities .priority:last-child {
+  border-bottom: none;
+}
+
+.new-task .priorities .priority:hover {
+  cursor: pointer;
+  background-color: #323131;
+}
+
+.new-task .labels-list {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 73.5%;
+  left: 25.3%;
+  background-color: #532222;
+  border-radius: 4px;
+  width: auto;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.new-task .labels-list-open {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.2s ease-in-out;
+}
+
+.new-task .individual-prop:hover {
+  cursor: pointer;
 }

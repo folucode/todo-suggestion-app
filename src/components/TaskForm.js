@@ -4,11 +4,13 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Image from 'next/image';
 import labelSVG from '../../public/svg/label.svg';
+import { ListLabels } from './ListLabels';
 
 export default function TaskForm(props) {
   const { initialValues, isAddTaskShow, toggleAddTask, isEdit } = props;
 
   const [isPrioritiesOpen, setIsPrioritiesOpen] = useState(false);
+  const [isListLabelsOpen, setIsListLabelsOpen] = useState(false);
 
   const [taskName, setTaskName] = useState(initialValues.taskName || '');
   const [description, setDescription] = useState(
@@ -23,11 +25,16 @@ export default function TaskForm(props) {
     initialValues.recurringFrequency || null
   );
 
+  const [labels, setLabels] = useState([]);
+  const [labelId, setLabelId] = useState('');
+  const [labelName, setLabelName] = useState(null);
+
   const textareaRef = useRef();
   const newTaskRef = useRef();
   const newPriorityRef = useRef();
   const priorityTextRef = useRef();
   const prioritySVGRef = useRef();
+  const listLabelsRef = useRef();
 
   const handleTextareaChange = () => {
     const textarea = textareaRef.current;
@@ -57,7 +64,7 @@ export default function TaskForm(props) {
       description,
       priority,
       dueDate,
-      labelId: '',
+      labelId,
       reminderOn,
       reminderTime,
       isRecurring,
@@ -98,7 +105,7 @@ export default function TaskForm(props) {
       description,
       priority,
       dueDate,
-      labelId: '',
+      labelId,
       reminderOn,
       reminderTime,
       isRecurring,
@@ -121,6 +128,34 @@ export default function TaskForm(props) {
     toggleAddTask();
   };
 
+  const getLabels = async () => {
+    const user = JSON.parse(localStorage.getItem('tasuke-user'));
+
+    const data = await fetch(
+      `${process.env.NEXT_PUBLIC_PROD_API_URL}/api/labels`,
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      }
+    );
+
+    const result = await data.json();
+
+    if (result.data.length < 1) {
+      setLabels([]);
+    }
+
+    setLabels(result.data);
+  };
+
+  useEffect(() => {
+    getLabels();
+  }, []);
+
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (isAddTaskShow) {
@@ -128,6 +163,14 @@ export default function TaskForm(props) {
 
         if (newTask && !newTask.contains(e.target)) {
           toggleAddTask();
+        }
+      }
+
+      if (isListLabelsOpen) {
+        const element = listLabelsRef.current;
+
+        if (element && !element.contains(e.target)) {
+          setIsListLabelsOpen(!isListLabelsOpen);
         }
       }
 
@@ -152,7 +195,7 @@ export default function TaskForm(props) {
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
-  }, [isAddTaskShow, toggleAddTask, isPrioritiesOpen]);
+  }, [isAddTaskShow, toggleAddTask, isPrioritiesOpen, isListLabelsOpen]);
 
   return (
     <div
@@ -211,14 +254,17 @@ export default function TaskForm(props) {
           </p>
         </div>
 
-        <div className={styles['individual-prop']}>
+        <div
+          className={styles['individual-prop']}
+          onClick={() => setIsListLabelsOpen(!isListLabelsOpen)}
+        >
           <Image src={labelSVG} alt='label icon' />
-          <p>Label</p>
+          <p>{labelName ? labelName : 'Label'}</p>
         </div>
       </div>
       <div
-        className={`${
-          isPrioritiesOpen ? styles['priorities'] : styles['hide-priorities']
+        className={`${styles['priorities']} ${
+          isPrioritiesOpen ? styles['show-priorities'] : ''
         }`}
         ref={newPriorityRef}
       >
@@ -258,6 +304,27 @@ export default function TaskForm(props) {
           </svg>
           <p onClick={(e) => setPriority(e.target.textContent)}>Low</p>
         </a>
+      </div>
+      <div
+        className={`${styles['labels-list']} ${
+          isListLabelsOpen ? styles['labels-list-open'] : ''
+        }`}
+        ref={listLabelsRef}
+      >
+        {labels.length < 1 ? (
+          <p>No labels</p>
+        ) : (
+          labels.map((label, index) => (
+            <ListLabels
+              name={label.name}
+              color={label.color}
+              key={index}
+              Id={label.labelId}
+              setLabelId={setLabelId}
+              setLabelName={setLabelName}
+            />
+          ))
+        )}
       </div>
       <div className={styles['new-task-footer']}>
         <button onClick={props.toggleAddTask}>Cancel</button>

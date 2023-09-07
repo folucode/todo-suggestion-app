@@ -1,0 +1,15 @@
+.individual-list {
+  display: flex;
+  font-size: medium;
+  border-bottom: 1px solid black;
+  padding: 5px;
+}
+
+.individual-list:hover {
+  cursor: pointer;
+  background-color: black;
+}
+
+.individual-list:last-child {
+  border-bottom: none;
+}

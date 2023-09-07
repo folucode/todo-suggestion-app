@@ -1,4 +1,6 @@
+import Image from 'next/image';
 import styles from '../styles/sidebar.module.css';
+import historySVG from '../../public/svg/history.svg';
 
 export default function Sidebar(props) {
   const sidebarClassName = `${styles.sidebar} ${
@@ -78,6 +80,17 @@ export default function Sidebar(props) {
                 <path d='M120-540v-300h300v300H120Zm80-80h140v-140H200v140Zm-80 500v-300h300v300H120Zm80-80h140v-140H200v140Zm340-340v-300h300v300H540Zm80-80h140v-140H620v140Zm-80 500v-300h300v300H540Zm80-80h140v-140H620v140ZM340-620Zm0 280Zm280-280Zm0 280Z' />
               </svg>
               <span>Labels</span>
+            </a>
+            <span>
+              <div>10</div>
+            </span>
+          </div>
+        </li>
+        <li>
+          <div className={styles['list-item']}>
+            <a href='/task-history'>
+              <Image src={historySVG} alt='history icon' />
+              <span>Task history</span>
             </a>
             <span>
               <div>10</div>

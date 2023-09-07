@@ -7,9 +7,16 @@
   border: 5px solid #323131;
 }
 
-.task-card span {
-  font-size: small;
-  margin-left: 35px;
+.task-card .card-footer {
+  display: flex;
+  margin-top: 10px;
+}
+
+.task-card .card-footer-item {
+  display: flex;
+  font-size: 11.5px;
+  margin-right: 15px;
+  line-height: 1.8;
 }
 
 .task-card .task-description {
