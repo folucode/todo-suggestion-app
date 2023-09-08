@@ -83,6 +83,7 @@
   width: auto;
   display: flex;
   justify-content: center;
+  position: relative;
 }
 
 .new-task .new-task-footer {
@@ -146,6 +147,7 @@
   display: flex;
   padding: 2px;
   border-bottom: 1px solid red;
+  padding: 10px;
 }
 
 .new-task .priorities .priority:last-child {
@@ -162,7 +164,7 @@
   flex-direction: column;
   position: fixed;
   top: 73.5%;
-  left: 25.3%;
+  left: 23%;
   background-color: #532222;
   border-radius: 4px;
   width: auto;
@@ -179,4 +181,24 @@
 
 .new-task .individual-prop:hover {
   cursor: pointer;
+}
+
+.new-task .recurring-frequency-list {
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  position: absolute;
+  top: 73%;
+  left: 41%;
+  opacity: 0;
+  visibility: hidden;
+  width: auto;
+  background-color: #532222;
+  transition: all 0.2s ease-in-out;
+}
+
+.new-task .recurring-frequency-list-open {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.2s ease-in-out;
 }

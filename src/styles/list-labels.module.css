@@ -2,7 +2,7 @@
   display: flex;
   font-size: medium;
   border-bottom: 1px solid black;
-  padding: 5px;
+  padding: 10px;
 }
 
 .individual-list:hover {

@@ -29,7 +29,7 @@ export default function Home() {
       Router.push('/auth/login');
     }
 
-    const socket = io(process.env.NEXT_PUBLIC_PROD_API_URL);
+    const socket = io(process.env.NEXT_PUBLIC_LOCAL_API_URL);
 
     socket.on('connect', function () {
       console.log('socket.io connected...');
@@ -37,6 +37,7 @@ export default function Home() {
     });
 
     socket.on('createTask', function (data) {
+      console.log(data);
       if (data.status == 'success') {
         getTasks();
       } else {
@@ -54,19 +55,20 @@ export default function Home() {
 
     socket.on('deleteTask', function (data) {
       if (data.status == 'success') {
-        if (data.data.taskStatus == 'Pending') {
-          let removedTaskIndex = pendingTasks.findIndex(
-            (task) => (task.taskId = data.data.taskId)
-          );
+        // if (data.data.taskStatus == 'Pending') {
+        //   let removedTaskIndex = pendingTasks.findIndex(
+        //     (task) => (task.taskId = data.data.taskId)
+        //   );
 
-          pendingTasks.splice(removedTaskIndex, 1);
-        } else {
-          let removedTaskIndex = completedTasks.findIndex(
-            (task) => (task.taskId = data.data.taskId)
-          );
+        //   pendingTasks.splice(removedTaskIndex, 1);
+        // } else {
+        //   let removedTaskIndex = completedTasks.findIndex(
+        //     (task) => (task.taskId = data.data.taskId)
+        //   );
 
-          completedTasks.splice(removedTaskIndex, 1);
-        }
+        //   completedTasks.splice(removedTaskIndex, 1);
+        // }
+        getTasks();
       } else {
         console.log(data);
       }
@@ -74,11 +76,7 @@ export default function Home() {
 
     socket.on('completeTask', function (data) {
       if (data.status == 'success') {
-        let task = pendingTasks.find(
-          (task) => (task.taskId = data.data.taskId)
-        );
-
-        completedTasks.push(task);
+        getTasks();
       } else {
         console.log(data);
       }
@@ -92,7 +90,7 @@ export default function Home() {
   const getTasks = async () => {
     const user = JSON.parse(localStorage.getItem('tasuke-user'));
 
-    const r = await fetch(`${process.env.NEXT_PUBLIC_PROD_API_URL}/api/tasks`, {
+    const r = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_API_URL}/api/tasks`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',

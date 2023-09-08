@@ -4,13 +4,16 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Image from 'next/image';
 import labelSVG from '../../public/svg/label.svg';
+import repeatSVG from '../../public/svg/repeat.svg';
 import { ListLabels } from './ListLabels';
+import { RecurringFrequency } from './RecurringFrequency';
 
 export default function TaskForm(props) {
   const { initialValues, isAddTaskShow, toggleAddTask, isEdit } = props;
 
   const [isPrioritiesOpen, setIsPrioritiesOpen] = useState(false);
   const [isListLabelsOpen, setIsListLabelsOpen] = useState(false);
+  const [isRecurringOpen, setIsRecurringOpen] = useState(false);
 
   const [taskName, setTaskName] = useState(initialValues.taskName || '');
   const [description, setDescription] = useState(
@@ -26,8 +29,8 @@ export default function TaskForm(props) {
   );
 
   const [labels, setLabels] = useState([]);
-  const [labelId, setLabelId] = useState('');
-  const [labelName, setLabelName] = useState(null);
+  const [labelId, setLabelId] = useState(initialValues.labelId || '');
+  const [labelName, setLabelName] = useState(initialValues.labelName || null);
 
   const textareaRef = useRef();
   const newTaskRef = useRef();
@@ -35,6 +38,9 @@ export default function TaskForm(props) {
   const priorityTextRef = useRef();
   const prioritySVGRef = useRef();
   const listLabelsRef = useRef();
+  const recurringRef = useRef();
+  const recurringSVGRef = useRef();
+  const newRecurringRef = useRef();
 
   const handleTextareaChange = () => {
     const textarea = textareaRef.current;
@@ -46,17 +52,6 @@ export default function TaskForm(props) {
   const handleAddTask = async (e) => {
     e.preventDefault();
 
-    let reminderOn = false;
-    let isRecurring = false;
-
-    if (reminderTime != null) {
-      reminderOn = true;
-    }
-
-    if (recurringFrequency != null) {
-      isRecurring = true;
-    }
-
     const user = JSON.parse(localStorage.getItem('tasuke-user'));
 
     const data = {
@@ -65,13 +60,11 @@ export default function TaskForm(props) {
       priority,
       dueDate,
       labelId,
-      reminderOn,
       reminderTime,
-      isRecurring,
       recurringFrequency,
     };
 
-    await fetch(`${process.env.NEXT_PUBLIC_PROD_API_URL}/api/tasks`, {
+    await fetch(`${process.env.NEXT_PUBLIC_LOCAL_API_URL}/api/tasks`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -87,17 +80,6 @@ export default function TaskForm(props) {
   const handleEditTask = async (e) => {
     e.preventDefault();
 
-    let reminderOn = false;
-    let isRecurring = false;
-
-    if (reminderTime != null) {
-      reminderOn = true;
-    }
-
-    if (recurringFrequency != null) {
-      isRecurring = true;
-    }
-
     const user = JSON.parse(localStorage.getItem('tasuke-user'));
 
     const data = {
@@ -106,14 +88,32 @@ export default function TaskForm(props) {
       priority,
       dueDate,
       labelId,
-      reminderOn,
       reminderTime,
-      isRecurring,
       recurringFrequency,
     };
 
+    const updates = {};
+
+    Object.keys(data).forEach((value) => {
+      if (value == 'name') {
+        if (initialValues['taskName'] != data[value]) {
+          updates[value] = data[value];
+        }
+      } else if (initialValues.hasOwnProperty(value)) {
+        if (value == 'reminderTime' || value == 'dueDate') {
+          if (String(initialValues[value]) !== String(data[value])) {
+            updates[value] = data[value];
+          }
+        } else {
+          if (initialValues[value] !== data[value]) {
+            updates[value] = data[value];
+          }
+        }
+      }
+    });
+
     await fetch(
-      `${process.env.NEXT_PUBLIC_PROD_API_URL}/api/tasks/${initialValues.taskId}`,
+      `${process.env.NEXT_PUBLIC_LOCAL_API_URL}/api/tasks/${initialValues.taskId}`,
       {
         method: 'PUT',
         headers: {
@@ -121,7 +121,7 @@ export default function TaskForm(props) {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.accessToken}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(updates),
       }
     );
 
@@ -189,13 +189,35 @@ export default function TaskForm(props) {
           setIsPrioritiesOpen(!isPrioritiesOpen);
         }
       }
+
+      if (isRecurringOpen) {
+        const element = newRecurringRef.current;
+
+        const notRecurringText = e.target == recurringRef.current;
+        const notRecurringSVG = e.target == recurringSVGRef.current;
+
+        if (
+          element &&
+          !element.contains(e.target) &&
+          !notRecurringText &&
+          !notRecurringSVG
+        ) {
+          setIsRecurringOpen(!isRecurringOpen);
+        }
+      }
     };
 
     document.addEventListener('mousedown', handleOutsideClick);
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
-  }, [isAddTaskShow, toggleAddTask, isPrioritiesOpen, isListLabelsOpen]);
+  }, [
+    isAddTaskShow,
+    toggleAddTask,
+    isPrioritiesOpen,
+    isListLabelsOpen,
+    isRecurringOpen,
+  ]);
 
   return (
     <div
@@ -260,6 +282,16 @@ export default function TaskForm(props) {
         >
           <Image src={labelSVG} alt='label icon' />
           <p>{labelName ? labelName : 'Label'}</p>
+        </div>
+        <div
+          className={styles['individual-prop']}
+          onClick={() => setIsRecurringOpen(!isRecurringOpen)}
+          ref={newRecurringRef}
+        >
+          <Image src={repeatSVG} alt='repeat icon' ref={recurringSVGRef} />
+          <p ref={recurringRef}>
+            {recurringFrequency ? recurringFrequency : 'Frequency'}
+          </p>
         </div>
       </div>
       <div
@@ -326,6 +358,16 @@ export default function TaskForm(props) {
           ))
         )}
       </div>
+
+      <div
+        className={`${styles['recurring-frequency-list']} ${
+          isRecurringOpen ? styles['recurring-frequency-list-open'] : ''
+        }`}
+        ref={newRecurringRef}
+      >
+        <RecurringFrequency setRecurringFrequency={setRecurringFrequency} />
+      </div>
+
       <div className={styles['new-task-footer']}>
         <button onClick={props.toggleAddTask}>Cancel</button>
         <button

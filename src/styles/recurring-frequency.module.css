@@ -1,0 +1,14 @@
+.individual-list {
+  color: black;
+  padding: 10px;
+  border-bottom: 1px solid saddlebrown;
+}
+
+.individual-list:last-child {
+  border-bottom: none;
+}
+
+.individual-list:hover {
+  cursor: pointer;
+  background-color: rgb(57, 55, 55);
+}
