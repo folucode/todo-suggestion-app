@@ -44,22 +44,14 @@
   border: none;
 }
 
-.notification {
+.nav-bar-icon {
   padding: 5px;
   height: 40px;
   width: 40px;
-  margin: 5px 20px;
+  margin: 5px 10px;
   border-radius: 3px;
 }
 
-.add {
-  padding: 5px;
-  height: 40px;
-  width: 40px;
-  margin: 5px 0;
-  border-radius: 3px;
-}
-
-.add:hover {
+.nav-bar-icon:hover {
   cursor: pointer;
 }

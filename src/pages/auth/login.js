@@ -8,7 +8,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    if (localStorage.getItem('tasuke-user') !== null) {
+    if (localStorage.getItem('tasuke-user') != null) {
       Router.push('/');
     }
   }, []);
