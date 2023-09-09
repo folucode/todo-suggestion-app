@@ -95,7 +95,16 @@ export default function TaskCard(props) {
   };
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('tasuke-user'));
+    // const user = JSON.parse(localStorage.getItem('tasuke-user'));
+
+    const user = {
+      user: {
+        email: 'tosinmoronfolu@yahoo.com',
+        fullName: 'Tosin Moronfolu',
+        username: 'chukwutosin',
+        timezone: 'Africa/Lagos',
+      },
+    };
 
     setUser(user);
 
