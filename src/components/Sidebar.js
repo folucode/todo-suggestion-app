@@ -24,12 +24,10 @@ export default function Sidebar(props) {
               </svg>
               <span>Inbox</span>
             </a>
-            <span>
-              <div>10</div>
-            </span>
+            <span>{/* <div>10</div> */}</span>
           </div>
         </li>
-        <li>
+        {/* <li>
           <div className={styles['list-item']}>
             <a href='/today'>
               <svg
@@ -44,11 +42,11 @@ export default function Sidebar(props) {
               <span>Today</span>
             </a>
             <span>
-              <div>10</div>
+              <div>10</div> 
             </span>
           </div>
-        </li>
-        <li>
+        </li> */}
+        {/* <li>
           <div className={styles['list-item']}>
             <a href='/upcoming'>
               <svg
@@ -62,11 +60,9 @@ export default function Sidebar(props) {
               </svg>
               <span>Upcoming</span>
             </a>
-            <span>
-              <div>10</div>
-            </span>
+            <span><div>10</div></span>
           </div>
-        </li>
+        </li> */}
         <li>
           <div className={styles['list-item']}>
             <a href='/labels'>
@@ -81,20 +77,16 @@ export default function Sidebar(props) {
               </svg>
               <span>Labels</span>
             </a>
-            <span>
-              <div>10</div>
-            </span>
+            <span>{/* <div>10</div> */}</span>
           </div>
         </li>
         <li>
           <div className={styles['list-item']}>
-            <a href='/task-history'>
+            <a href='/activity'>
               <Image src={historySVG} alt='history icon' />
-              <span>Task history</span>
+              <span>Activity</span>
             </a>
-            <span>
-              <div>10</div>
-            </span>
+            <span>{/* <div>10</div> */}</span>
           </div>
         </li>
       </ul>

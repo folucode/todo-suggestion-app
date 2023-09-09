@@ -64,7 +64,7 @@ export default function TaskForm(props) {
       recurringFrequency,
     };
 
-    await fetch(`${process.env.NEXT_PUBLIC_LOCAL_API_URL}/api/tasks`, {
+    await fetch(`${process.env.NEXT_PUBLIC_PROD_API_URL}/api/tasks`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -113,7 +113,7 @@ export default function TaskForm(props) {
     });
 
     await fetch(
-      `${process.env.NEXT_PUBLIC_LOCAL_API_URL}/api/tasks/${initialValues.taskId}`,
+      `${process.env.NEXT_PUBLIC_PROD_API_URL}/api/tasks/${initialValues.taskId}`,
       {
         method: 'PUT',
         headers: {

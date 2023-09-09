@@ -29,7 +29,7 @@ export default function Home() {
       Router.push('/auth/login');
     }
 
-    const socket = io(process.env.NEXT_PUBLIC_LOCAL_API_URL);
+    const socket = io(process.env.NEXT_PUBLIC_PROD_API_URL);
 
     socket.on('connect', function () {
       console.log('socket.io connected...');
@@ -90,7 +90,7 @@ export default function Home() {
   const getTasks = async () => {
     const user = JSON.parse(localStorage.getItem('tasuke-user'));
 
-    const r = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_API_URL}/api/tasks`, {
+    const r = await fetch(`${process.env.NEXT_PUBLIC_PROD_API_URL}/api/tasks`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
