@@ -69,7 +69,7 @@ export default function TaskForm(props) {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.accessToken}`,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
       },
       body: JSON.stringify(data),
     });
@@ -119,7 +119,7 @@ export default function TaskForm(props) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.accessToken}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
         },
         body: JSON.stringify(updates),
       }
@@ -138,7 +138,7 @@ export default function TaskForm(props) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.accessToken}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
         },
       }
     );

@@ -131,7 +131,7 @@ export default function Labels() {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.accessToken}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
         },
       }
     );
@@ -160,7 +160,7 @@ export default function Labels() {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.accessToken}`,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
       },
       body: JSON.stringify(body),
     });
@@ -184,7 +184,7 @@ export default function Labels() {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.accessToken}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
         },
       }
     );
@@ -222,7 +222,7 @@ export default function Labels() {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.accessToken}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
         },
         body: JSON.stringify(body),
       }

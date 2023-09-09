@@ -69,7 +69,7 @@ export default function TaskCard(props) {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.accessToken}`,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
       },
     });
 
@@ -86,7 +86,7 @@ export default function TaskCard(props) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.accessToken}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
         },
       }
     );

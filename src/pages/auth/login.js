@@ -8,9 +8,9 @@ export default function Login() {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    if (localStorage.getItem('tasuke-user') != null) {
-      Router.push('/');
-    }
+    // if (localStorage.getItem('tasuke-user') != null) {
+    //   Router.push('/');
+    // }
   }, []);
 
   const handleAuth = async (event) => {
@@ -63,7 +63,7 @@ export default function Login() {
         />
 
         <button onClick={handleAuth} type='submit'>
-          Sign up with Email
+          Sign in
         </button>
         <p>
           Don't have an account?{' '}

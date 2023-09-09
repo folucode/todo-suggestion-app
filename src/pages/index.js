@@ -25,9 +25,9 @@ export default function Home() {
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   useEffect(() => {
-    if (localStorage.getItem('tasuke-user') == null) {
-      Router.push('/auth/login');
-    }
+    // if (localStorage.getItem('tasuke-user') == null) {
+    //   Router.push('/auth/login');
+    // }
 
     const socket = io(process.env.NEXT_PUBLIC_PROD_API_URL);
 
@@ -95,7 +95,7 @@ export default function Home() {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.accessToken}`,
+        Authorization: `Bearer ${process.env.token}`,
       },
     });
 
