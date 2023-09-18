@@ -1,11 +1,14 @@
 import Image from 'next/image';
 import styles from '../styles/navbar.module.css';
-import addSVG from '../../public/svg/add.svg';
+import menuSVG from '../../public/svg/menu.svg';
+import notificationsSVG from '../../public/svg/notifications.svg';
+import settingsSVG from '../../public/svg/settings.svg';
+import accountSVG from '../../public/svg/account.svg';
 import logoutSVG from '../../public/svg/logout.svg';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 
 export default function Navbar(props) {
-  const { toggleSidebar, toggleAddTask } = props;
+  const { toggleSidebar } = props;
 
   const handleLogout = async () => {
     localStorage.removeItem('tasuke-user');
@@ -13,34 +16,40 @@ export default function Navbar(props) {
     Router.push('/auth/login');
   };
 
+  const currentPath = useRouter();
+  const currentPage = currentPath.pathname.replace('/', '');
+
   return (
     <div className={styles.navigation}>
-      <div className={styles.left_group}>
-        <svg
+      <div className={styles['left-group']}>
+        <Image
+          src={menuSVG}
+          alt='menu icon'
           onClick={toggleSidebar}
-          className={styles.menu}
-          xmlns='http://www.w3.org/2000/svg'
-          viewBox='0 -960 960 960'
-        >
-          <path d='M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z' />
-        </svg>
-        <input type='text' name='search' className={styles.search} />
+          className={styles['nav-bar-icon']}
+        />
+        <p>{currentPage == '' ? 'Inbox' : currentPage}</p>
       </div>
 
-      <div className={styles.right_group}>
+      <div className={styles['right-group']}>
         <Image
-          src={addSVG}
-          onClick={toggleAddTask}
+          src={notificationsSVG}
+          alt='notifications icon'
           className={styles['nav-bar-icon']}
-          alt='add icon'
         />
-        <svg
+        <Image
+          src={settingsSVG}
+          alt='settings icon'
           className={styles['nav-bar-icon']}
-          xmlns='http://www.w3.org/2000/svg'
-          viewBox='0 -960 960 960'
-        >
-          <path d='M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z' />
-        </svg>
+        />
+        <div className={styles['nav-account']}>
+          <p>{`Tosin`}</p>
+          <Image
+            src={accountSVG}
+            alt='account icon'
+            className={styles['nav-bar-icon']}
+          />
+        </div>
         <Image
           src={logoutSVG}
           alt='logout icon'

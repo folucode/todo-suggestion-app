@@ -1,76 +1,71 @@
 .task-card {
-  background-color: #323131;
+  background-color: #1e2327;
   height: auto;
-  padding: 5px;
+  padding: 15px;
   margin: 5px 0;
   border-radius: 5px;
-  border: 5px solid #323131;
+  width: 310px;
+  display: flex;
 }
 
-.task-card .card-footer {
+.card-icon {
   display: flex;
-  margin-top: 10px;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: auto;
+}
+
+.card-icon img:hover {
+  cursor: pointer;
+  border-radius: 12px;
+  background-color: #656d74;
+}
+
+.content-area {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 0 5px;
+  gap: 5px;
+}
+
+.content-area:hover {
+  cursor: pointer;
+}
+
+.task-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  height: 42px;
+  line-height: 1;
+  overflow: hidden;
+  white-space: wrap;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.task-description {
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 14px;
+  height: 30px;
+  font-weight: 400px;
+  text-overflow: ellipsis;
+  color: #ffffff;
+}
+
+.card-footer {
+  display: flex;
+  gap: 10px;
+  height: 13px;
+  color: #656d74;
 }
 
 .task-card .card-footer-item {
   display: flex;
-  font-size: 11.5px;
-  margin-right: 15px;
-  line-height: 1.8;
-}
-
-.task-card .task-description {
-  overflow: hidden;
-  white-space: nowrap;
-  max-width: 275px;
-  margin-left: 35px;
-  font-size: small;
-  text-overflow: ellipsis;
-}
-
-.task-title {
-  display: flex;
-  max-width: 350px;
-  overflow: hidden;
-}
-
-.task-title svg {
-  fill: white;
-}
-
-.task-title svg:hover {
-  fill: lightblue;
-  cursor: pointer;
-}
-
-.task-title h3 {
-  margin: 0 10px;
-  font-size: 20px;
-  font-size: large;
-}
-
-.card-more {
-  display: flex;
-  flex-direction: column;
-  background-color: rgb(70, 88, 104);
-  width: 200px;
-  border-radius: 5px;
-  position: absolute;
-  margin-left: -100px;
-  margin-top: -10px;
-}
-
-.card-more-item {
-  display: flex;
-  color: black;
-  margin: 8px 5px;
-}
-
-.card-more-item:hover {
-  cursor: pointer;
-}
-
-.card-more-item p {
-  margin-left: 15px;
-  align-self: center;
+  font-size: 10px;
+  align-items: center;
+  gap: 2px;
+  margin-top: 10px;
 }

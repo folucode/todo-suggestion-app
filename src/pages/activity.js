@@ -10,19 +10,18 @@ import updatedSVG from '../../public/svg/updated_action.svg';
 import addedSVG from '../../public/svg/added_action.svg';
 import deleteSVG from '../../public/svg/delete_action.svg';
 import Image from 'next/image';
-import TaskForm from '@/components/TaskForm';
+import momentTZ from 'moment-timezone';
 
 export default function Activity() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isAddTaskShow, setIsAddTaskShow] = useState(false);
   const [activities, setActivities] = useState([]);
   const [selectedAction, setSelectedAction] = useState('All actions');
   const [selectedActionSVG, setSelectedActionSVG] = useState('');
+  const [user, setUser] = useState('');
 
   const [isActionsListOpen, setIsActionsListOpen] = useState(false);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
-  const toggleAddTask = () => setIsAddTaskShow(!isAddTaskShow);
 
   const actions = [
     {
@@ -72,6 +71,7 @@ export default function Activity() {
 
   const getActivities = async () => {
     const user = JSON.parse(localStorage.getItem('tasuke-user'));
+    setUser(user);
 
     const data = await fetch(
       `${process.env.NEXT_PUBLIC_PROD_API_URL}/api/activities/${
@@ -82,7 +82,7 @@ export default function Activity() {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+          Authorization: `Bearer ${user.accessToken}`,
         },
       }
     );
@@ -105,16 +105,13 @@ export default function Activity() {
       <HeadComponent />
 
       <div className={mainStyles.page}>
-        <Navbar toggleSidebar={toggleSidebar} toggleAddTask={toggleAddTask} />
+        <Sidebar isSidebarOpen={isSidebarOpen} />
 
         <main className={mainStyles.main}>
-          <Sidebar isSidebarOpen={isSidebarOpen} />
-          <div
-            className={mainStyles['main-area']}
-            style={{ marginLeft: isSidebarOpen ? '300px' : '0' }}
-          >
+          <Navbar toggleSidebar={toggleSidebar} />
+
+          <div className={mainStyles['main-area']}>
             <div className={styles['activity-area']}>
-              <h1 style={{ marginBottom: '10px', color: 'black' }}>Activity</h1>
               <div
                 className={styles['activity-actions-area']}
                 ref={actionListRef}
@@ -202,13 +199,6 @@ export default function Activity() {
             </div>
           </div>
         </main>
-
-        <TaskForm
-          initialValues={{}}
-          isEdit={false}
-          isAddTaskShow={isAddTaskShow}
-          toggleAddTask={toggleAddTask}
-        />
       </div>
     </div>
   );

@@ -1,81 +1,109 @@
 .container {
-  height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
-.container span {
-  color: brown;
-  font-weight: bolder;
-  text-decoration: underline;
+.form-container {
+  align-self: center;
+  flex-direction: column;
+  display: flex;
+  margin-top: 100px;
+  height: auto;
 }
 
-.container h1 {
-  margin-bottom: 30px;
-  color: black;
+.form-container img {
+  margin-bottom: 50px;
 }
 
-.container label {
-  color: black;
+.form-container h1 {
+  color: #34383b;
+  align-self: flex-start;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.form-container label {
+  color: #2a3034;
   width: 350px;
   margin-top: 20px;
+  font-size: 14px;
 }
 
-.container select {
+.form-container select {
   width: 350px;
   height: 50px;
-  background-color: whitesmoke;
+  background-color: #ffffff;
   border-radius: 5px;
-  border: 1px solid gray;
-  color: black;
-  font-size: larger;
-  padding: 10px;
-  margin: 5px;
+  border: 1px solid #cbd4da;
+  color: #757575;
+  font-size: 16px;
+  padding: 12px 11px;
+  margin: 5px 0;
+  font-weight: 500;
 }
 
-.container input {
+.form-container input {
   width: 350px;
   height: 50px;
-  background-color: whitesmoke;
+  background-color: #ffffff;
   border-radius: 5px;
-  border: 1px solid gray;
-  color: black;
-  font-size: larger;
-  padding: 10px;
-  margin: 5px;
+  border: 1px solid #cbd4da;
+  color: #757575;
+  font-size: 16px;
+  padding: 12px 11px;
+  margin: 5px 0;
+  font-weight: 500;
 }
 
-.container input:focus {
-  outline-color: purple;
-  outline-width: 1.5px;
+.form-container::placeholder {
+  color: #757575;
+  font-size: 16px;
+}
+
+.form-container input:focus {
+  outline-color: #0072bb;
+  outline-width: 1px;
   outline-style: solid;
   border: none;
+  color: #0072bb;
 }
 
-.container button {
-  width: 350px;
-  height: 50px;
-  background-color: purple;
+.form-container select:focus {
+  outline-color: #0072bb;
+  outline-width: 1px;
+  outline-style: solid;
+  border: none;
+  color: #0072bb;
+}
+
+.form-container button {
+  width: 175px;
+  height: 45px;
+  background-color: #0072bb;
   border-radius: 5px;
   border: none;
-  color: whitesmoke;
+  color: #f5f5f5;
   padding: 10px;
   margin-top: 20px;
-  font-size: larger;
+  font-size: 16px;
+  font-weight: 600;
 }
 
-.container button:hover {
+.form-container button:hover {
   cursor: pointer;
-  background-color: rgb(168, 14, 168);
+  background-color: #258ac9;
 }
 
-.container p {
-  margin-top: 20px;
-  color: black;
+.form-container p {
+  margin: 20px 0;
+  color: #000000;
+  font-weight: 400;
+  font-size: 14px;
 }
 
-.link {
+.form-container a {
   text-decoration: underline;
+  color: #0072bb;
 }

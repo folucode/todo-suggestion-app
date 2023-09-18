@@ -1,30 +1,46 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  position: fixed;
   box-sizing: border-box;
-  background-color: #282828;
-  height: calc(100vh - 50px);
-  width: 300px;
-  gap: 20px;
-  margin: 0;
-  padding: 0;
-  left: 0;
-  transition: left 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: #0e1114;
   flex: 0 0 auto;
+  height: 100vh;
+  width: 260px;
+  gap: 48px;
+  transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.sidebar-transition {
-  transition: left 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  left: -300px;
+.hide-sidebar {
+  transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-left: -260px;
 }
 
-.sidebar ul {
-  display: inline-block;
-  box-sizing: border-box;
+.logo-area {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+  width: inherit;
+}
+
+.logo-area img {
+  width: 16px;
+  height: 22px;
+}
+
+.logo-area p {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.sidebar .nav-items {
   list-style: none;
-  margin: 1em;
-  position: relative;
+  margin-top: 30px;
+  margin-left: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .sidebar ul li {
@@ -35,7 +51,7 @@
 .sidebar .list-item {
   display: flex;
   padding: 2px;
-  justify-content: space-between;
+  gap: 10px;
 }
 
 .sidebar .list-item a {
@@ -43,32 +59,10 @@
   padding: 2px;
   text-decoration: none;
   align-items: center;
-  flex: 1;
 }
 
 .sidebar .list-item span {
   display: flex;
   padding: 2px;
   align-items: center;
-}
-
-.active {
-  background-color: #323131;
-  border-radius: 5px;
-}
-
-.today {
-  fill: aquamarine;
-}
-
-.upcoming {
-  fill: greenyellow;
-}
-
-.inbox {
-  fill: blueviolet;
-}
-
-.labels {
-  fill: brown;
 }

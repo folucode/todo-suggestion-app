@@ -2,11 +2,11 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 600px;
-  height: 100vh;
-  align-self: center;
-  margin-top: 25px;
-  padding: 10px;
+  background-color: #0e1114;
+  margin: 0 40px;
+  padding: 30px;
+  border-radius: 5px;
+  height: calc(100vh - 150px);
 }
 
 .activity-actions-area {
@@ -27,17 +27,18 @@
 
 .selected-action:hover {
   cursor: pointer;
-  color: black;
+  color: white;
+  border: 1px solid white;
 }
 
 .actions {
   display: flex;
   flex-direction: column;
   position: fixed;
-  background-color: rgb(190, 150, 150);
+  background-color: #1d1c1c;
   border-radius: 5px;
-  top: 21.5%;
-  left: 36.7%;
+  top: 20.5%;
+  left: 22%;
   visibility: hidden;
   opacity: 0;
   transition: all ease-in-out 0.2s;
@@ -78,20 +79,25 @@
   display: flex;
   flex-direction: column;
   margin-top: 20px;
-  width: inherit;
+  width: 100%;
+  overflow-y: hidden;
+}
+
+.user-actions-list:hover {
+  overflow-y: auto;
 }
 
 .user-actions-list-header {
-  color: black;
+  color: white;
   padding-bottom: 5px;
   margin-top: 15px;
   font-weight: bold;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid gray;
 }
 
 .individual-user-actions {
   display: flex;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid gray;
   padding: 5px;
 }
 
@@ -110,7 +116,7 @@
 
 .individual-user-actions-main p {
   font-size: smaller;
-  color: black;
+  color: white;
 }
 
 .individual-user-actions-main span {

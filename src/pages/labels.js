@@ -7,13 +7,11 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import editSVG from '../../public/svg/edit.svg';
 import deleteSVG from '../../public/svg/delete.svg';
-import addSVG from '../../public/svg/add.svg';
+import addSVG from '../../public/svg/add_step.svg';
 import { io } from 'socket.io-client';
-import TaskForm from '@/components/TaskForm';
 
 export default function Labels() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isAddTaskShow, setIsAddTaskShow] = useState(false);
   const [isAddLabelShow, setIsAddLabelShow] = useState(false);
   const [isAddLabelColorShow, setIsAddLabelColorShow] = useState(false);
   const [labels, setLabels] = useState([]);
@@ -25,7 +23,6 @@ export default function Labels() {
   const [labelColorName, setLabelColorName] = useState('');
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
-  const toggleAddTask = () => setIsAddTaskShow(!isAddTaskShow);
 
   const addLabelClassName = `${labelStyles['add-label-container']} ${
     isAddLabelShow ? labelStyles['show-add-label-container'] : ''
@@ -131,7 +128,7 @@ export default function Labels() {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+          Authorization: `Bearer ${user.accessToken}`,
         },
       }
     );
@@ -241,15 +238,12 @@ export default function Labels() {
       </Head>
 
       <div className={mainStyles.page}>
-        <Navbar toggleSidebar={toggleSidebar} toggleAddTask={toggleAddTask} />
+        <Sidebar isSidebarOpen={isSidebarOpen} />
 
         <main className={mainStyles.main}>
-          <Sidebar isSidebarOpen={isSidebarOpen} />
-          <div
-            className={mainStyles['main-area']}
-            style={{ marginLeft: isSidebarOpen ? '300px' : '0' }}
-          >
-            <h1 style={{ marginLeft: '30px' }}>Labels</h1>
+          <Navbar toggleSidebar={toggleSidebar} />
+
+          <div className={mainStyles['main-area']}>
             <div className={labelStyles['label-area']}>
               <div className={labelStyles.header}>
                 <p>labels</p>
@@ -376,13 +370,6 @@ export default function Labels() {
             ))}
           </div>
         </div>
-
-        <TaskForm
-          initialValues={{}}
-          isEdit={false}
-          isAddTaskShow={isAddTaskShow}
-          toggleAddTask={toggleAddTask}
-        />
       </div>
     </>
   );

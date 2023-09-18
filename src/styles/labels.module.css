@@ -1,11 +1,17 @@
 .label-area {
   display: flex;
   flex-direction: column;
-  align-self: center;
+  align-items: center;
+  background-color: #0e1114;
+  margin: 0 40px;
+  padding: 30px;
+  border-radius: 5px;
+  height: calc(100vh - 150px);
 }
 
 .label-area p {
-  color: black;
+  color: white;
+  align-self: flex-start;
 }
 
 .label-area .header {
@@ -14,6 +20,7 @@
   margin-top: 15px;
   padding-bottom: 5px;
   font-size: larger;
+  width: 500px;
 }
 
 .label-area .header img {
@@ -43,7 +50,7 @@
   display: flex;
   flex-direction: column;
   position: fixed;
-  background-color: bisque;
+  background-color: #0c0e10;
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -62,10 +69,10 @@
 
 .add-label-header {
   display: flex;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid white;
   padding: 5px;
   font-size: x-large;
-  color: black;
+  color: white;
 }
 
 .add-label-input-area {
@@ -77,32 +84,28 @@
 .add-label-input {
   display: flex;
   flex-direction: column;
-  color: black;
+  color: white;
   margin: 5px 0;
 }
 
 .input-name {
-  border: 2px solid lightgoldenrodyellow;
+  border: none;
   outline-style: none;
   outline-width: 0px;
   border-radius: 3px;
   height: 30px;
   padding: 5px;
+  background-color: #1E2327;
 }
 
 .input-color {
   display: flex;
   border-radius: 3px;
-  border: 2px solid lightgoldenrodyellow;
+  border: none;
   padding: 5px;
   font-size: small;
   line-height: 1.85;
-}
-
-.input-name:focus {
-  outline: solid 2px lightgreen;
-  border: none;
-  transition: outline ease-in 0.25s;
+  background-color: #1E2327;
 }
 
 .add-label-footer {
@@ -124,28 +127,29 @@
 }
 
 .add-label-footer button:first-child {
-  background-color: azure;
+  background-color: white;
 }
 
 .add-label-footer button:first-child:hover {
-  background-color: rgb(254, 255, 255);
+  background-color: lightcoral;
   cursor: pointer;
 }
 
 .add-label-footer button:last-child {
-  background-color: brown;
+  background-color: rgb(37, 36, 36);
+  color: white;
 }
 
 .add-label-footer button:last-child:hover {
   cursor: pointer;
-  background-color: rgb(190, 66, 66);
+  background-color: rgb(47, 46, 46);
 }
 
 .label-color-list {
   display: flex;
   position: fixed;
   flex-direction: column;
-  background-color: slategray;
+  background-color: #1E2327;
   border-radius: 3px;
   top: 73%;
   left: 3%;

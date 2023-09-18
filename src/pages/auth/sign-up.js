@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
 import Router from 'next/router';
 import Link from 'next/link';
+import Image from 'next/image';
+import logo from '../../../public/svg/logo-auth.svg';
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
@@ -60,63 +62,66 @@ export default function SignUp() {
       </Head>
 
       <div className={authStyles.container}>
-        <h1>
-          Sign up on - <span>Tasuke</span>
-        </h1>
-        <label htmlFor='full-name'>Full Name:</label>
-        <input
-          type='text'
-          placeholder='Enter your full name...'
-          name='fullName'
-          onChange={(e) => setFullName(e.target.value)}
-          onBlur={(e) => focusOutHandler(e, 'fullName')}
-        />
-        <label htmlFor='username'>Username:</label>
-        <input
-          type='text'
-          placeholder='Enter your username...'
-          name='username'
-          onChange={(e) => setUsername(e.target.value)}
-          onBlur={(e) => focusOutHandler(e, 'username')}
-        />
-        <label htmlFor='email'>Email:</label>
-        <input
-          type='email'
-          placeholder='Enter your email...'
-          name='email'
-          onChange={(e) => setEmail(e.target.value)}
-          onBlur={(e) => focusOutHandler(e, 'email')}
-        />
-        <label htmlFor='timezone'>Choose your timezone:</label>
-        <select
-          id='timezone'
-          name='timezone'
-          onChange={(e) => setTimezone(e.target.value)}
-          onBlur={(e) => focusOutHandler(e, 'timezone')}
-        >
-          {moment.tz.names().map((timezone, index) => (
-            <option key={index} value={timezone}>
-              {timezone}
-            </option>
-          ))}
-        </select>
-        <label htmlFor='password'>Password:</label>
-        <input
-          type='password'
-          placeholder='Enter your password...'
-          name='password'
-          onChange={(e) => setPassword(e.target.value)}
-          onBlur={(e) => focusOutHandler(e, 'password')}
-        />
-        <button onClick={handleAuth} type='submit'>
-          Sign up with Email
-        </button>
-        <p>
-          Already signed up?{' '}
-          <Link href='/auth/login' className={authStyles.link}>
-            Go to login
-          </Link>
-        </p>
+        <div className={authStyles['form-container']}>
+          <Image src={logo} alt='app logo' />
+          <h1>
+            Create an account
+          </h1>
+          <label htmlFor='full-name'>Full Name:</label>
+          <input
+            type='text'
+            placeholder='Enter your full name...'
+            name='fullName'
+            onChange={(e) => setFullName(e.target.value)}
+            onBlur={(e) => focusOutHandler(e, 'fullName')}
+          />
+          <label htmlFor='username'>Username:</label>
+          <input
+            type='text'
+            placeholder='Enter your username...'
+            name='username'
+            onChange={(e) => setUsername(e.target.value)}
+            onBlur={(e) => focusOutHandler(e, 'username')}
+          />
+          <label htmlFor='email'>Email:</label>
+          <input
+            type='email'
+            placeholder='Enter your email...'
+            name='email'
+            onChange={(e) => setEmail(e.target.value)}
+            onBlur={(e) => focusOutHandler(e, 'email')}
+          />
+          <label htmlFor='timezone'>Choose your timezone:</label>
+          <select
+            id='timezone'
+            name='timezone'
+            onChange={(e) => setTimezone(e.target.value)}
+            onBlur={(e) => focusOutHandler(e, 'timezone')}
+          >
+            {moment.tz.names().map((timezone, index) => (
+              <option key={index} value={timezone}>
+                {timezone}
+              </option>
+            ))}
+          </select>
+          <label htmlFor='password'>Password:</label>
+          <input
+            type='password'
+            placeholder='Enter your password...'
+            name='password'
+            onChange={(e) => setPassword(e.target.value)}
+            onBlur={(e) => focusOutHandler(e, 'password')}
+          />
+          <button onClick={handleAuth} type='submit'>
+            Sign up with Email
+          </button>
+          <p>
+            Already signed up?{' '}
+            <Link href='/auth/login' className={authStyles.link}>
+              Go to login
+            </Link>
+          </p>
+        </div>
       </div>
     </>
   );

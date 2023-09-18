@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import authStyles from '../../styles/auth.module.css';
 import Link from 'next/link';
 import Router from 'next/router';
+import Image from 'next/image';
+import logo from '../../../public/svg/logo-auth.svg';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -38,39 +40,41 @@ export default function Login() {
 
     Router.push('/');
   };
+
   return (
     <>
       <div className={authStyles.container}>
-        <h1>
-          Login to - <span>Tasuke</span>
-        </h1>
-        <label htmlFor='username'>Username:</label>
-        <input
-          type='text'
-          placeholder='Enter your username...'
-          name='username'
-          onChange={(e) => setUsername(e.target.value)}
-          //   onBlur={(e) => focusOutHandler(e, 'username')}
-        />
+        <div className={authStyles['form-container']}>
+          <Image src={logo} alt='app logo' />
+          <h1>Login to your account</h1>
+          <label htmlFor='username'>Username:</label>
+          <input
+            type='text'
+            placeholder='Enter your username...'
+            name='username'
+            onChange={(e) => setUsername(e.target.value)}
+            //   onBlur={(e) => focusOutHandler(e, 'username')}
+          />
 
-        <label htmlFor='password'>Password:</label>
-        <input
-          type='password'
-          placeholder='Enter your password...'
-          name='password'
-          onChange={(e) => setPassword(e.target.value)}
-          //   onBlur={(e) => focusOutHandler(e, 'password')}
-        />
+          <label htmlFor='password'>Password:</label>
+          <input
+            type='password'
+            placeholder='Enter your password...'
+            name='password'
+            onChange={(e) => setPassword(e.target.value)}
+            //   onBlur={(e) => focusOutHandler(e, 'password')}
+          />
 
-        <button onClick={handleAuth} type='submit'>
-          Sign in
-        </button>
-        <p>
-          Don't have an account?{' '}
-          <Link href='/auth/sign-up' className={authStyles.link}>
-            Sign up
-          </Link>
-        </p>
+          <button onClick={handleAuth} type='submit'>
+            Sign in
+          </button>
+          <p>
+            Don't have an account?{' '}
+            <Link href='/auth/sign-up' className={authStyles.link}>
+              Sign up
+            </Link>
+          </p>
+        </div>
       </div>
     </>
   );
