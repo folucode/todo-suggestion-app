@@ -89,8 +89,6 @@ export default function Activity() {
 
     const result = await data.json();
 
-    console.log(result.data.activities);
-
     setActivities(result.data.activities);
   };
 

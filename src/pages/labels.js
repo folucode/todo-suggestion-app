@@ -191,7 +191,6 @@ export default function Labels() {
     e.preventDefault();
 
     const label = labelColors.find((label) => label.color == labelColor);
-    console.log(label);
 
     setLabelColor(label.color);
     setLabelColorName(label.name);

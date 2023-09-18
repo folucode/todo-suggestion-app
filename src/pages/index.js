@@ -4,14 +4,12 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { io } from 'socket.io-client';
 import Sidebar from '@/components/Sidebar';
-import TaskForm from '@/components/TaskForm';
 import TaskCard from '@/components/TaskCard';
 import Navbar from '@/components/Navbar';
 import addTaskSVG from '../../public/svg/add_task.svg';
 import addStepSVG from '../../public/svg/add_step.svg';
 import circleSVG from '../../public/svg/circle.svg';
 import calendarSVG from '../../public/svg/calendar.svg';
-import editSVG from '../../public/svg/edit.svg';
 import deleteSVG from '../../public/svg/delete.svg';
 import DatePicker from 'react-datepicker';
 import momentTZ from 'moment-timezone';
@@ -138,8 +136,6 @@ export default function Home() {
         updates[value] = data[value];
       }
     });
-
-    console.log(updates);
 
     if (Object.keys(updates).length > 0) {
       await fetch(
@@ -282,7 +278,6 @@ export default function Home() {
   };
 
   const markAsDone = async (taskId) => {
-    console.log(taskId);
     await fetch(
       `${process.env.NEXT_PUBLIC_PROD_API_URL}/api/tasks/${taskId}/mark-as-done`,
       {
